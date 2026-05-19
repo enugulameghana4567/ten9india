@@ -1,0 +1,13 @@
+{
+  "name": "ten9-ministries-india",
+  "version": "1.0.0",
+  "description": "TEN9 Ministries India - Full Stack Website",
+  "scripts": {
+    "install-all": "cd server && npm install && cd ../client && npm install",
+    "dev-server": "cd server && npm run dev",
+    "dev-client": "cd client && npm start",
+    "build": "cd client && npm run build"
+  },
+  "keywords": ["ministry", "react", "nodejs", "mongodb"],
+  "author": "TEN9 Ministries India"
+}

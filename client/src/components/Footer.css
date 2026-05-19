@@ -1,0 +1,64 @@
+.footer { background: var(--crimson-dark); color: var(--gold-light); margin-top: 80px; }
+.footer-top { padding: 48px 0 32px; }
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+@media (min-width: 640px)  { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1024px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; } }
+
+.footer-brand .footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.footer-cross  { font-size: 2rem; color: var(--gold); }
+.footer-name   { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: white; font-weight: 700; }
+.footer-verse  { font-size: 0.72rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+.footer-tagline { font-style: italic; color: var(--gold-light); margin-bottom: 10px; font-size: 0.95rem; }
+.footer-desc   { color: rgba(255,255,255,0.55); font-size: 0.88rem; line-height: 1.7; }
+
+.footer-links-col h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+}
+.footer-links-col a {
+  display: block;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 7px;
+  font-size: 0.88rem;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.footer-links-col a:hover { color: var(--gold); }
+
+.footer-contact h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+}
+.footer-contact p { color: rgba(255,255,255,0.65); font-size: 0.88rem; margin-bottom: 7px; }
+
+.footer-bottom {
+  border-top: 1px solid rgba(200,169,110,0.25);
+  padding: 20px 0;
+  text-align: center;
+}
+.footer-verse-quote {
+  font-style: italic;
+  color: var(--gold-light);
+  font-size: 0.84rem;
+  margin-bottom: 8px;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+  padding: 0 16px;
+}
+.footer-copy { color: rgba(255,255,255,0.35); font-size: 0.8rem; }

@@ -1,0 +1,67 @@
+
+/* Helper page view */
+.helper-page-view { background: white; border: 2px solid var(--gold-light); border-radius: 10px; padding: 32px; }
+.helper-page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--gold-light);
+}
+.helper-page-header h3 { font-size: 1.4rem; color: var(--crimson); flex: 1; }
+.btn-back {
+  background: none;
+  border: 1.5px solid var(--gold);
+  color: var(--text-mid);
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-back:hover { background: var(--parchment); }
+.btn-visit {
+  background: var(--crimson);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-visit:hover { background: var(--crimson-dark); }
+.helper-page-content-display { }
+.content-block {
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: var(--parchment);
+  border-radius: 8px;
+  border-left: 3px solid var(--gold);
+}
+.content-block label {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 8px;
+}
+.content-block p { color: var(--text-mid); line-height: 1.8; font-size: 1rem; }
+.content-block.verse { border-left-color: var(--crimson); background: #fff5f5; }
+.content-block.verse p { font-style: italic; color: var(--crimson); }
+.content-list { list-style: none; }
+.content-list li { padding: 6px 0; color: var(--text-mid); font-size: 0.98rem; border-bottom: 1px solid rgba(200,169,110,0.2); }
+.content-list li:last-child { border-bottom: none; }
+.content-sub-item {
+  background: white;
+  border: 1px solid var(--gold-light);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+.content-sub-item strong { color: var(--crimson); display: block; margin-bottom: 4px; }
+.content-sub-item p { color: var(--text-mid); font-size: 0.92rem; }

@@ -1,0 +1,27 @@
+.involved-section { padding: 80px 0; }
+.ways-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 60px;
+}
+.way-card {
+  background: white;
+  border: 2px solid var(--gold-light);
+  border-radius: 10px;
+  padding: 36px 24px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.way-card:hover { border-color: var(--crimson); transform: translateY(-6px); box-shadow: var(--shadow); }
+.way-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; }
+.way-card h3 { color: var(--crimson); font-size: 1.05rem; }
+.join-banner {
+  background: var(--parchment);
+  border: 2px solid var(--gold-light);
+  border-radius: 12px;
+  padding: 60px;
+}
+.join-inner { text-align: center; }
+.join-inner h2 { font-size: 2.2rem; margin-bottom: 14px; }
+.join-inner p { color: var(--text-mid); font-size: 1.1rem; margin-bottom: 28px; max-width: 600px; margin-left: auto; margin-right: auto; }

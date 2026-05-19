@@ -1,0 +1,48 @@
+.give-section { padding: 80px 0; }
+.give-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; }
+.give-info h2 { font-size: 2.2rem; }
+.give-info p { color: var(--text-mid); font-size: 1.05rem; line-height: 1.8; margin-bottom: 24px; }
+.supports-title { color: var(--crimson); margin-bottom: 16px; }
+.supports-list { margin-bottom: 28px; }
+.support-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gold-light);
+  color: var(--text-mid);
+}
+.support-item span:first-child { color: var(--crimson); font-weight: 700; font-size: 1.1rem; }
+.give-quote {
+  background: var(--parchment);
+  border-left: 4px solid var(--gold);
+  padding: 16px 20px;
+  font-style: italic;
+  color: var(--text-mid);
+  border-radius: 0 8px 8px 0;
+}
+.give-methods { background: white; border: 2px solid var(--gold-light); border-radius: 12px; padding: 36px; }
+.give-methods h3 { color: var(--crimson); margin-bottom: 24px; font-size: 1.4rem; }
+.method-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--parchment);
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.method-icon { font-size: 2rem; }
+.method-card h4 { color: var(--text-dark); margin-bottom: 4px; }
+.method-card p { color: var(--text-light); font-size: 0.9rem; }
+.upi-box {
+  background: var(--crimson);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+.give-contact-note { border-top: 1px solid var(--gold-light); padding-top: 16px; }
+.give-contact-note p { color: var(--text-mid); font-size: 0.95rem; margin-bottom: 8px; }
+@media (max-width: 768px) { .give-grid { grid-template-columns: 1fr; } }

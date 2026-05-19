@@ -1,0 +1,41 @@
+.christmas-section { padding: 80px 0; }
+.christmas-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+.christmas-content h2 { font-size: 2.2rem; margin-bottom: 4px; }
+.christmas-content p { color: var(--text-mid); font-size: 1.05rem; line-height: 1.8; margin-bottom: 32px; }
+.activities-list h3 { color: var(--crimson); margin-bottom: 16px; }
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--parchment);
+  border-radius: 6px;
+  padding: 12px 18px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: var(--text-mid);
+}
+.activity-icon { font-size: 1.3rem; }
+.christmas-visual img { width: 100%; border-radius: 10px; box-shadow: var(--shadow-lg); margin-bottom: 24px; }
+.goal-card {
+  background: var(--crimson);
+  color: white;
+  border-radius: 10px;
+  padding: 28px;
+  text-align: center;
+}
+.goal-star { font-size: 2rem; margin-bottom: 12px; display: block; }
+.goal-card h3 { color: var(--gold); margin-bottom: 10px; }
+.goal-card p { font-style: italic; opacity: 0.9; font-size: 0.98rem; line-height: 1.7; }
+.christmas-cta {
+  background: var(--parchment);
+  padding: 60px 0;
+  text-align: center;
+}
+.christmas-cta h2 { font-size: 2rem; margin-bottom: 12px; }
+.christmas-cta p { color: var(--text-mid); font-size: 1.1rem; margin-bottom: 28px; }
+@media (max-width: 768px) { .christmas-grid { grid-template-columns: 1fr; } }

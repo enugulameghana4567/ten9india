@@ -1,0 +1,37 @@
+.childcare-main { padding: 80px 0; }
+.childcare-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 60px; align-items: start; }
+.childcare-desc { color: var(--text-mid); font-size: 1.05rem; line-height: 1.8; margin-bottom: 28px; }
+.provides-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.provide-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--parchment);
+  border: 1px solid var(--gold-light);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: var(--text-mid);
+}
+.provide-icon { font-size: 1.2rem; }
+.purpose-box {
+  background: var(--crimson);
+  color: white;
+  border-radius: 8px;
+  padding: 20px 24px;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.purpose-box strong { color: var(--gold); }
+.childcare-images { position: relative; }
+.cc-img-main { width: 100%; border-radius: 10px; box-shadow: var(--shadow-lg); margin-bottom: 16px; }
+.cc-img-sm { width: 60%; border-radius: 8px; box-shadow: var(--shadow); margin-left: auto; display: block; }
+@media (max-width: 768px) {
+  .childcare-grid { grid-template-columns: 1fr; }
+  .provides-grid { grid-template-columns: 1fr; }
+}

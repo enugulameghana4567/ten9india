@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:wght@300;400;500;600&display=swap');
+
+/* ── CSS Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --crimson:       #8B1A1A;
+  --crimson-dark:  #6B0F0F;
+  --crimson-light: #C0392B;
+  --gold:          #C8A96E;
+  --gold-light:    #E8D4A0;
+  --gold-dark:     #A07840;
+  --cream:         #FFF8F0;
+  --parchment:     #F5ECD7;
+  --white:         #FFFFFF;
+  --text-dark:     #2C1810;
+  --text-mid:      #5C3D2E;
+  --text-light:    #9B7B6B;
+  --shadow:        0 4px 24px rgba(139,26,26,0.12);
+  --shadow-lg:     0 8px 40px rgba(139,26,26,0.18);
+  --radius:        8px;
+  --navbar-h:      68px;
+}
+
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--crimson);
+  line-height: 1.25;
+}
+
+a    { text-decoration: none; color: inherit; }
+img  { max-width: 100%; height: auto; display: block; }
+button { cursor: pointer; font-family: 'Crimson Pro', serif; }
+input, textarea, select {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+}
+
+/* ── Layout helpers ────────────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 640px)  { .container { padding: 0 24px; } }
+@media (min-width: 1024px) { .container { padding: 0 40px; } }
+@media (min-width: 1280px) { .container { padding: 0 48px; } }
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-block;
+  background: var(--crimson);
+  color: white;
+  border: none;
+  padding: 11px 24px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Crimson Pro', serif;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  background: var(--crimson-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.btn-outline {
+  display: inline-block;
+  background: transparent;
+  color: var(--crimson);
+  border: 2px solid var(--crimson);
+  padding: 9px 22px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Crimson Pro', serif;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-outline:hover { background: var(--crimson); color: white; }
+
+.btn-gold {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--text-dark);
+  border: none;
+  padding: 11px 24px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Crimson Pro', serif;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.btn-gold:hover { background: var(--gold-dark); color: white; }
+
+/* ── Section helpers ───────────────────────────────────────────────────────── */
+.section-title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  color: var(--crimson);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.section-subtitle {
+  text-align: center;
+  color: var(--text-mid);
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.gold-divider {
+  width: 60px;
+  height: 3px;
+  background: var(--gold);
+  margin: 12px auto 32px;
+}
+.section-label {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 8px;
+}
+.gold-bar { width: 50px; height: 3px; background: var(--gold); margin: 10px 0 18px; }
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+/* ── Toast ─────────────────────────────────────────────────────────────────── */
+.Toastify__toast { font-family: 'Crimson Pro', serif !important; font-size: 1rem !important; }
+
+/* ── Global responsive spacing ─────────────────────────────────────────────── */
+.section-pad     { padding: 60px 0; }
+.section-pad-lg  { padding: 80px 0; }
+
+@media (max-width: 768px) {
+  .section-pad    { padding: 40px 0; }
+  .section-pad-lg { padding: 48px 0; }
+}
+@media (max-width: 480px) {
+  .section-pad    { padding: 32px 0; }
+  .section-pad-lg { padding: 40px 0; }
+}
