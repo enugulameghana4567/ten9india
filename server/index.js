@@ -15,7 +15,8 @@ const app = express();
 app.use(cors({
   origin: function(origin, callback) {
     const allowed = [
-      'https://ten9india.vercel.app',
+      'https://ten9-india.vercel.app',
+      'https://ten9-india.onrender.com',
       'http://localhost:3000',
       'http://localhost:5173'
     ];
