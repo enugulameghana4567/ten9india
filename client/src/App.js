@@ -10,8 +10,6 @@ import Home from './pages/Home';
 import About from './pages/About';
 import WhatWeDo from './pages/WhatWeDo';
 import Building from './pages/Building';
-import Christmas from './pages/Christmas';
-import ChildCare from './pages/ChildCare';
 import GetInvolved from './pages/GetInvolved';
 import Give from './pages/Give';
 import Contact from './pages/Contact';
@@ -46,25 +44,25 @@ function App() {
       <ToastContainer position="top-right" autoClose={3500} />
       <Navbar />
       <Routes>
-        {/* Public Pages */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/what-we-do" element={<WhatWeDo />} />
         <Route path="/building-projects" element={<Building />} />
-        <Route path="/christmas-2026" element={<Christmas />} />
-        <Route path="/child-care" element={<ChildCare />} />
         <Route path="/get-involved" element={<GetInvolved />} />
         <Route path="/give" element={<Give />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/supporters" element={<Supporters />} />
+        <Route path="/partners" element={<Supporters />} />
 
-        {/* Auth — no owner signup */}
+        {/* Redirects for old URLs */}
+        <Route path="/supporters" element={<Navigate to="/partners" />} />
+        <Route path="/christmas-2026" element={<Navigate to="/" />} />
+        <Route path="/child-care" element={<Navigate to="/" />} />
+
         <Route path="/auth" element={<AuthLanding />} />
         <Route path="/auth/owner/login" element={<OwnerLogin />} />
         <Route path="/auth/helper/signup" element={<HelperSignup />} />
         <Route path="/auth/helper/login" element={<HelperLogin />} />
 
-        {/* Dashboards */}
         <Route path="/dashboard/owner" element={
           <ProtectedRoute requiredRole="owner"><OwnerDashboard /></ProtectedRoute>
         } />

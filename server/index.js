@@ -16,7 +16,7 @@ app.use(cors({
   origin: function(origin, callback) {
     const allowed = [
       'https://ten9-india.vercel.app',
-      'https://ten9-india.onrender.com',
+      'https://ten9-india-git-main-enugulameghana4567s-projects.vercel.app',
       'http://localhost:3000',
       'http://localhost:5173'
     ];
@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
       mongoSet:       !!process.env.MONGO_URI,
       ownerEmailSet:  !!process.env.OWNER_EMAIL,
       ownerPassSet:   !!process.env.OWNER_PASSWORD,
-      resendKeySet:   !!process.env.RESEND_API_KEY
+      brevoSet:       !!process.env.BREVO_USER && !!process.env.BREVO_PASS
     }
   });
 });
@@ -70,37 +70,38 @@ app.get('/api/public/supporters', async (req, res) => {
 // ── Resend Test Route ─────────────────────────────────────────────────────────
 // Open in browser: https://ten9india.onrender.com/api/test-email
 app.get('/api/test-email', async (req, res) => {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailPass = process.env.GMAIL_APP_PASSWORD;
+  if (!gmailUser || !gmailPass) {
     return res.json({
       success: false,
-      error: 'RESEND_API_KEY is not set in Render environment variables',
-      fix: 'Go to Render → Environment → Add RESEND_API_KEY with your key from resend.com'
+      error: 'GMAIL_USER or GMAIL_APP_PASSWORD is not set',
+      fix: 'Go to Render → Environment → Add GMAIL_USER and GMAIL_APP_PASSWORD'
     });
   }
 
   try {
-    const { Resend } = require('resend');
-    const resend = new Resend(apiKey);
-    const { data, error } = await resend.emails.send({
-      from:    process.env.RESEND_FROM || 'TEN9 Ministries India <onboarding@resend.dev>',
-      to:      [process.env.OWNER_EMAIL || 'ten9india@gmail.com'],
+    const nodemailer = require('nodemailer');
+    const cleanPass = (process.env.GMAIL_APP_PASSWORD || '').replace(/\s/g, '');
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: { user: process.env.GMAIL_USER, pass: cleanPass },
+      tls: { rejectUnauthorized: false }
+    });
+    await transporter.verify();
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to:   process.env.GMAIL_USER,
       subject: 'TEN9 Ministries - Email Test',
-      text:    'Resend is working correctly on your live server!'
+      text: 'Gmail SMTP is working correctly!'
     });
-
-    if (error) {
-      return res.json({ success: false, error: error.message || JSON.stringify(error) });
-    }
-
-    console.log('✅ Test email sent via Resend, id:', data?.id);
-    res.json({
-      success: true,
-      message: `Test email sent to ${process.env.OWNER_EMAIL}`,
-      id: data?.id
-    });
+    res.json({ success: true, message: 'Test email sent to ' + process.env.GMAIL_USER });
   } catch (err) {
-    res.json({ success: false, error: err.message });
+    res.json({ success: false, error: err.message,
+      fix: 'Check GMAIL_USER and GMAIL_APP_PASSWORD in Render environment variables'
+    });
   }
 });
 
@@ -115,7 +116,7 @@ mongoose.connect(MONGO_URI)
       console.log(`✅ Server running on port ${PORT}`);
       console.log(`   OWNER_EMAIL    : ${process.env.OWNER_EMAIL    || '⚠️ NOT SET'}`);
       console.log(`   OWNER_PASSWORD : ${process.env.OWNER_PASSWORD ? '✅ SET' : '⚠️ NOT SET'}`);
-      console.log(`   RESEND_API_KEY : ${process.env.RESEND_API_KEY ? '✅ SET' : '⚠️ NOT SET'}`);
+      console.log(`   BREVO_USER     : ${process.env.BREVO_USER     || '⚠️ NOT SET'}`);
       const { verifySMTP } = require('./config/mailer');
       await verifySMTP();
     });

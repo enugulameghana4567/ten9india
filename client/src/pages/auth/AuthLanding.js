@@ -18,7 +18,7 @@ const AuthLanding = () => {
           <div className="auth-type-card">
             <div className="auth-type-icon">👑</div>
             <h2>Ministry Owner</h2>
-            <p>Access the owner dashboard to manage pages, view helpers, and post announcements.</p>
+            <p>Access the owner dashboard to manage pages, view partners, and post announcements.</p>
             <div className="auth-type-buttons">
               <Link to="/auth/owner/login" className="btn-primary">Login as Owner</Link>
             </div>
@@ -26,11 +26,11 @@ const AuthLanding = () => {
           <div className="auth-divider"><span>OR</span></div>
           <div className="auth-type-card">
             <div className="auth-type-icon">🤝</div>
-            <h2>Ministry Helper</h2>
+            <h2>Ministry Partner</h2>
             <p>Register or sign in to stay connected and receive ministry updates and announcements.</p>
             <div className="auth-type-buttons">
-              <Link to="/auth/helper/login" className="btn-primary">Login as Helper</Link>
-              <Link to="/auth/helper/signup" className="btn-outline">Register as Helper</Link>
+              <Link to="/auth/helper/login" className="btn-primary">Login as Partner</Link>
+              <Link to="/auth/helper/signup" className="btn-outline">Register as Partner</Link>
             </div>
           </div>
         </div>

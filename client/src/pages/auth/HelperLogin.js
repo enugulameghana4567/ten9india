@@ -38,7 +38,7 @@ const HelperLogin = () => {
 
         <div className="auth-form-header">
           <span className="auth-form-cross">🤝</span>
-          <h2>Helper Login</h2>
+          <h2>Partner Login</h2>
           <p>Welcome back to TEN9 Ministries India</p>
         </div>
 
@@ -67,7 +67,7 @@ const HelperLogin = () => {
         </form>
 
         <div className="auth-footer-link">
-          Not registered? <Link to="/auth/helper/signup">Sign up here</Link>
+          Not registered? <Link to="/auth/helper/signup">Register as Partner</Link>
         </div>
         <div className="auth-footer-link" style={{ marginTop: '8px' }}>
           <Link to="/auth">&#8592; Back to Auth Options</Link>

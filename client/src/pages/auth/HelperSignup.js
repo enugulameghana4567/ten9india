@@ -66,10 +66,10 @@ const HelperSignup = () => {
 
         <div className="auth-form-header">
           <span className="auth-form-cross">🤝</span>
-          <h2>{step === 1 ? 'Join as Helper' : 'Verify Your Email'}</h2>
+          <h2>{step === 1 ? 'Join as Partner' : 'Verify Your Email'}</h2>
           <p>
             {step === 1
-              ? 'Register to stay connected with TEN9 Ministries India'
+              ? 'Register as a Partner of TEN9 Ministries India'
               : `Enter the 6-digit code sent to ${form.email}`}
           </p>
         </div>

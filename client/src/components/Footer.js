@@ -14,7 +14,7 @@ const Footer = () => (
               <div className="footer-verse">Romans 10:9</div>
             </div>
           </div>
-          <p className="footer-tagline">"Sharing the Love of Christ Across Nations"</p>
+          <p className="footer-tagline">"Sharing the Love of Christ Across India"</p>
           <p className="footer-desc">A Christ-centered ministry dedicated to sharing hope, faith, and transformation through Jesus Christ.</p>
         </div>
         <div className="footer-links-col">
@@ -23,21 +23,19 @@ const Footer = () => (
           <Link to="/about">About Us</Link>
           <Link to="/what-we-do">What We Do</Link>
           <Link to="/building-projects">Building Projects</Link>
-          <Link to="/christmas-2026">Project Christmas 2026</Link>
+          <Link to="/get-involved">Get Involved</Link>
         </div>
         <div className="footer-links-col">
           <h4>Ministry</h4>
-          <Link to="/child-care">Child Care</Link>
-          <Link to="/get-involved">Get Involved</Link>
-          <Link to="/give">Your Give</Link>
-          <Link to="/supporters">Supporters</Link>
+          <Link to="/give">Give</Link>
+          <Link to="/partners">Partners</Link>
           <Link to="/contact">Contact Us</Link>
           <Link to="/auth">Sign In</Link>
         </div>
         <div className="footer-contact">
           <h4>Contact</h4>
-          <p>📧 ten9india@gmail.com</p>
-          <p>📍 TEN9 Ministries India</p>
+          <p>ten9india@gmail.com</p>
+          <p>TEN9 Ministries India</p>
         </div>
       </div>
     </div>
