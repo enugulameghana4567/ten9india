@@ -128,7 +128,7 @@ const OwnerDashboard = () => {
       fd.append('name', supForm.name);
       fd.append('image', supImage);
       await API.post('/owner/supporters', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
-      toast.success('Supporter added! ✝');
+      toast.success('Partner added! ✝');
       setSupForm({ name: '' }); setSupImage(null); setSupImagePreview(null);
       if (supFileRef.current) supFileRef.current.value = '';
       fetchSupporters();
@@ -229,8 +229,8 @@ const OwnerDashboard = () => {
           <button className={activeTab==='overview'?'active':''} onClick={()=>setActiveTab('overview')}>📊 Overview</button>
           <button className={activeTab==='pages'?'active':''} onClick={()=>setActiveTab('pages')}>📝 Manage Pages</button>
           <button className={activeTab==='announce'?'active':''} onClick={()=>setActiveTab('announce')}>📢 Announcements</button>
-          <button className={activeTab==='supporters'?'active':''} onClick={()=>setActiveTab('supporters')}>🌟 Supporters</button>
-          <button className={activeTab==='helpers'?'active':''} onClick={()=>setActiveTab('helpers')}>🤝 Helpers ({counts.helpers})</button>
+          <button className={activeTab==='supporters'?'active':''} onClick={()=>setActiveTab('supporters')}>🌟 Partners</button>
+          <button className={activeTab==='helpers'?'active':''} onClick={()=>setActiveTab('helpers')}>🤝 Partners ({counts.helpers})</button>
           <button className={activeTab==='messages'?'active':''} onClick={()=>{setActiveTab('messages');fetchContacts();}}>
             ✉ Messages {counts.unreadContacts>0&&<span className="badge">{counts.unreadContacts}</span>}
           </button>
@@ -240,7 +240,7 @@ const OwnerDashboard = () => {
 
       <div className="dash-main">
         <div className="dash-topbar">
-          <h2>{['overview','pages','announce','supporters','helpers','messages','payment'].includes(activeTab) && {overview:'Dashboard Overview',pages:'Manage Pages',announce:'Announcements',supporters:'Supporters',helpers:'Registered Helpers',messages:'Contact Messages',payment:'Payment Confirmation'}[activeTab]}</h2>
+          <h2>{['overview','pages','announce','supporters','helpers','messages','payment'].includes(activeTab) && {overview:'Dashboard Overview',pages:'Manage Pages',announce:'Announcements',supporters:'Supporters',helpers:'Registered Partners',messages:'Contact Messages',payment:'Payment Confirmation'}[activeTab]}</h2>
           <div className="dash-user-info"><span>👑 {user?.name}</span><span className="owner-badge">Owner</span></div>
         </div>
 
@@ -323,7 +323,7 @@ const OwnerDashboard = () => {
                     <div className="announce-card-header">
                       <div>
                         <h4>{ann.title}</h4>
-                        <span className="announce-date">{new Date(ann.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</span>
+                        <span className="announce-date">{ann.createdAt ? new Date(ann.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}) : 'N/A'}</span>
                         <span className="announce-read-count">👁 {ann.readBy?.length||0} helpers read</span>
                       </div>
                       <button className="btn-delete" onClick={()=>deleteAnnouncement(ann._id)}>🗑 Delete</button>
@@ -347,14 +347,14 @@ const OwnerDashboard = () => {
           {activeTab==='supporters' && (
             <div>
               <div className="announce-form-card">
-                <h3>🌟 Add New Supporter</h3>
+                <h3>🌟 Add New Partner</h3>
                 <form onSubmit={submitSupporter}>
                   <div className="form-group">
-                    <label>Supporter Name *</label>
+                    <label>Partner Name *</label>
                     <input value={supForm.name} onChange={e=>setSupForm({name:e.target.value})} placeholder="Full name" required />
                   </div>
                   <div className="form-group">
-                    <label>Supporter Photo *</label>
+                    <label>Partner Photo *</label>
                     <div className="image-upload-area single" onClick={()=>supFileRef.current.click()}>
                       <input ref={supFileRef} type="file" accept="image/*" onChange={handleSupImage} style={{display:'none'}} />
                       {supImagePreview ? (
@@ -365,14 +365,14 @@ const OwnerDashboard = () => {
                     </div>
                   </div>
                   <button type="submit" className="btn-save" disabled={supSubmitting} style={{padding:'12px 28px'}}>
-                    {supSubmitting ? 'Adding...' : '✝ Add Supporter'}
+                    {supSubmitting ? 'Adding...' : '✝ Add Partner'}
                   </button>
                 </form>
               </div>
 
               <div className="supporters-owner-grid">
                 {supporters.length===0 ? (
-                  <div className="empty-state"><span>🌟</span><p>No supporters added yet.</p></div>
+                  <div className="empty-state"><span>🌟</span><p>No partners added yet.</p></div>
                 ) : supporters.map(s=>(
                   <div key={s._id} className="sup-card">
                     <img src={`/uploads/${s.image}`} alt={s.name} onError={e=>{e.target.src='https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=200&q=80';}} />
@@ -387,9 +387,9 @@ const OwnerDashboard = () => {
           {/* HELPERS */}
           {activeTab==='helpers' && (
             <div>
-              <div className="section-header"><h3>Registered Helpers ({helpers.length})</h3></div>
+              <div className="section-header"><h3>Registered Partners ({helpers.length})</h3></div>
               {helpers.length===0 ? (
-                <div className="empty-state"><span>🤝</span><p>No helpers registered yet.</p></div>
+                <div className="empty-state"><span>🤝</span><p>No partners registered yet.</p></div>
               ) : (
                 <div className="helpers-table-wrap">
                   <table className="data-table">
@@ -426,7 +426,7 @@ const OwnerDashboard = () => {
                       <div className="msg-header">
                         <div className="msg-from"><strong>{msg.fullName}</strong><span>{msg.email}</span></div>
                         <div className="msg-meta">
-                          <span className="msg-date">{new Date(msg.createdAt).toLocaleDateString()}</span>
+                          <span className="msg-date">{msg.createdAt ? new Date(msg.createdAt).toLocaleDateString('en-IN') : 'N/A'}</span>
                           {!msg.read&&<button className="btn-mark-read" onClick={()=>markRead(msg._id)}>Mark Read</button>}
                           {msg.read&&<span className="read-badge">✓ Read</span>}
                         </div>

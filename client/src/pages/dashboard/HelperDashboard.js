@@ -39,7 +39,7 @@ const HelperDashboard = () => {
   };
 
   const fetchSupporters = async () => {
-    try { const { data } = await API.get('/helpers/supporters'); setSupporters(data); } catch {}
+    try { const { data } = await API.get('/helpers/partners'); setSupporters(data); } catch {}
   };
 
   const viewPage = async (pageKey) => {
@@ -91,7 +91,7 @@ const HelperDashboard = () => {
       <div className="dash-sidebar">
         <div className="dash-logo">
           <span className="dash-cross">✝</span>
-          <div><div className="dash-ministry">TEN9 Helper</div><div className="dash-name">{user?.name}</div></div>
+          <div><div className="dash-ministry">TEN9 Partner</div><div className="dash-name">{user?.name}</div></div>
         </div>
         <nav className="dash-nav">
           <button className={activeTab==='overview'?'active':''} onClick={()=>setActiveTab('overview')}>📊 Overview</button>
@@ -106,7 +106,7 @@ const HelperDashboard = () => {
 
       <div className="dash-main">
         <div className="dash-topbar">
-          <h2>{{overview:'Helper Dashboard',announcements:'Announcements',pages:'Ministry Pages',view:'Page Content',supporters:'Supporters',profile:'My Profile'}[activeTab]||'Dashboard'}</h2>
+          <h2>{{overview:'Partner Dashboard',announcements:'Announcements',pages:'Ministry Pages',view:'Page Content',supporters:'Supporters',profile:'My Profile'}[activeTab]||'Dashboard'}</h2>
           <div className="dash-user-info"><span>🤝 {user?.name}</span><span className="helper-badge">Helper</span></div>
         </div>
 
@@ -181,9 +181,9 @@ const HelperDashboard = () => {
 
           {activeTab==='supporters' && (
             <div>
-              <div className="section-header"><h3>Ministry Supporters ({supporters.length})</h3></div>
+              <div className="section-header"><h3>Ministry Partners ({supporters.length})</h3></div>
               {supporters.length===0 ? (
-                <div className="empty-state"><span>🌟</span><p>No supporters added yet.</p></div>
+                <div className="empty-state"><span>🌟</span><p>No partners added yet.</p></div>
               ) : (
                 <div className="helper-supporters-grid">
                   {supporters.map(s=>(
@@ -203,7 +203,7 @@ const HelperDashboard = () => {
                 <div className="helper-avatar">👤</div>
                 <div style={{flex:1}}>
                   <h3>{user?.name}</h3>
-                  <p style={{color:'var(--text-light)',marginBottom:'16px'}}>Ministry Helper</p>
+                  <p style={{color:'var(--text-light)',marginBottom:'16px'}}>Ministry Partner</p>
                   <div className="helper-details-grid">
                     <div className="helper-detail-item"><label>Email</label><span>{user?.email}</span></div>
                     <div className="helper-detail-item"><label>Country</label><span>{user?.country||'—'}</span></div>

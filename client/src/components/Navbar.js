@@ -4,16 +4,14 @@ import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 const NAV_LINKS = [
-  { to: '/',                  label: 'Home' },
-  { to: '/about',             label: 'About Us' },
-  { to: '/what-we-do',        label: 'What We Do' },
-  { to: '/building-projects', label: 'Building Projects' },
-  { to: '/christmas-2026',    label: 'Christmas 2026' },
-  { to: '/child-care',        label: 'Child Care' },
-  { to: '/get-involved',      label: 'Get Involved' },
-  { to: '/give',              label: 'Your Give' },
-  { to: '/supporters',        label: 'Supporters' },
-  { to: '/contact',           label: 'Contact Us' },
+  { to: '/',                  label: 'HOME' },
+  { to: '/about',             label: 'ABOUT US' },
+  { to: '/what-we-do',        label: 'WHAT WE DO' },
+  { to: '/building-projects', label: 'BUILDING PROJECTS' },
+  { to: '/get-involved',      label: 'GET INVOLVED' },
+  { to: '/give',              label: 'GIVE' },
+  { to: '/partners',          label: 'PARTNERS' },
+  { to: '/contact',           label: 'CONTACT US' },
 ];
 
 const Navbar = () => {
@@ -24,28 +22,22 @@ const Navbar = () => {
   const navigate                  = useNavigate();
   const menuRef                   = useRef(null);
 
-  // Scroll effect
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close menu on route change
   useEffect(() => setMenuOpen(false), [location]);
 
-  // Close menu on outside click
   useEffect(() => {
     const handler = e => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuOpen(false);
-      }
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
     };
     if (menuOpen) document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, [menuOpen]);
 
-  // Prevent body scroll when mobile menu open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -57,12 +49,20 @@ const Navbar = () => {
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} ref={menuRef}>
       <div className="nav-container">
 
-        {/* Brand */}
+        {/* Brand with Logo */}
         <Link to="/" className="nav-brand" onClick={() => setMenuOpen(false)}>
-          <span className="nav-cross">&#10013;</span>
-          <div className="brand-text">
-            <span className="brand-name">TEN9 Ministries</span>
-            <span className="brand-sub">India</span>
+          <img
+            src="/logo.png"
+            alt="TEN9 Ministries India"
+            className="nav-logo-img"
+            onError={e => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+          />
+          <div className="nav-logo-fallback" style={{display:'none'}}>
+            <span className="nav-cross">&#10013;</span>
+            <div className="brand-text">
+              <span className="brand-name">TEN9 Ministries</span>
+              <span className="brand-sub">India</span>
+            </div>
           </div>
         </Link>
 
@@ -137,18 +137,13 @@ const Navbar = () => {
               </button>
             </>
           ) : (
-            <Link
-              to="/auth"
-              className="btn-drawer-signin"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link to="/auth" className="btn-drawer-signin" onClick={() => setMenuOpen(false)}>
               Sign In
             </Link>
           )}
         </div>
       </div>
 
-      {/* Overlay */}
       {menuOpen && (
         <div className="nav-overlay" onClick={() => setMenuOpen(false)} />
       )}
