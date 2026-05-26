@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cors     = require('cors');
 const dotenv   = require('dotenv');
 const path     = require('path');
+const https    = require('https');
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ app.use(cors({
         (origin && origin.includes('vercel.app'))) {
       return callback(null, true);
     }
-    return callback(null, true); // allow all for now
+    return callback(null, true);
   },
   credentials: true,
   methods: ['GET','POST','PUT','DELETE','OPTIONS','PATCH'],
@@ -42,10 +43,10 @@ app.get('/', (req, res) => {
     status: 'TEN9 Ministries India Server is running',
     time: new Date().toISOString(),
     env: {
-      mongoSet:       !!process.env.MONGO_URI,
-      ownerEmailSet:  !!process.env.OWNER_EMAIL,
-      ownerPassSet:   !!process.env.OWNER_PASSWORD,
-      brevoSet:       !!process.env.BREVO_USER && !!process.env.BREVO_PASS
+      mongoSet:      !!process.env.MONGO_URI,
+      ownerEmailSet: !!process.env.OWNER_EMAIL,
+      ownerPassSet:  !!process.env.OWNER_PASSWORD,
+      brevoSet:      !!process.env.BREVO_API_KEY
     }
   });
 });
@@ -57,6 +58,7 @@ app.use('/api/pages',   require('./routes/pages'));
 app.use('/api/helpers', require('./routes/helpers'));
 app.use('/api/contact', require('./routes/contact'));
 
+// ── Public supporters ─────────────────────────────────────────────────────────
 app.get('/api/public/supporters', async (req, res) => {
   try {
     const Supporter = require('./models/Supporter');
@@ -67,42 +69,66 @@ app.get('/api/public/supporters', async (req, res) => {
   }
 });
 
-// ── Resend Test Route ─────────────────────────────────────────────────────────
-// Open in browser: https://ten9india.onrender.com/api/test-email
+// ── Test Email Route ──────────────────────────────────────────────────────────
 app.get('/api/test-email', async (req, res) => {
-  const gmailUser = process.env.GMAIL_USER;
-  const gmailPass = process.env.GMAIL_APP_PASSWORD;
-  if (!gmailUser || !gmailPass) {
+  const apiKey = process.env.BREVO_API_KEY;
+
+  if (!apiKey) {
     return res.json({
       success: false,
-      error: 'GMAIL_USER or GMAIL_APP_PASSWORD is not set',
-      fix: 'Go to Render → Environment → Add GMAIL_USER and GMAIL_APP_PASSWORD'
+      error: 'BREVO_API_KEY is not set in Render environment variables',
+      fix: 'Go to Render → Environment → Add BREVO_API_KEY'
     });
   }
 
-  try {
-    const nodemailer = require('nodemailer');
-    const cleanPass = (process.env.GMAIL_APP_PASSWORD || '').replace(/\s/g, '');
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: { user: process.env.GMAIL_USER, pass: cleanPass },
-      tls: { rejectUnauthorized: false }
+  const body = JSON.stringify({
+    sender: { name: 'TEN9 Ministries India', email: 'ten9india@gmail.com' },
+    to: [{ email: process.env.OWNER_EMAIL || 'ten9india@gmail.com' }],
+    subject: 'TEN9 Ministries - Email Test',
+    textContent: 'Brevo HTTP API is working correctly! Emails will reach any helper inbox.'
+  });
+
+  const options = {
+    hostname: 'api.brevo.com',
+    path: '/v3/smtp/email',
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'api-key': apiKey,
+      'content-type': 'application/json',
+      'content-length': Buffer.byteLength(body)
+    }
+  };
+
+  const request = https.request(options, (response) => {
+    let data = '';
+    response.on('data', chunk => data += chunk);
+    response.on('end', () => {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        console.log('✅ Test email sent via Brevo API');
+        res.json({
+          success: true,
+          message: `Test email sent to ${process.env.OWNER_EMAIL}`,
+          statusCode: response.statusCode
+        });
+      } else {
+        console.error('❌ Brevo API error:', data);
+        res.json({
+          success: false,
+          error: data,
+          statusCode: response.statusCode,
+          fix: 'Check your BREVO_API_KEY is correct in Render environment variables'
+        });
+      }
     });
-    await transporter.verify();
-    await transporter.sendMail({
-      from: process.env.GMAIL_USER,
-      to:   process.env.GMAIL_USER,
-      subject: 'TEN9 Ministries - Email Test',
-      text: 'Gmail SMTP is working correctly!'
-    });
-    res.json({ success: true, message: 'Test email sent to ' + process.env.GMAIL_USER });
-  } catch (err) {
-    res.json({ success: false, error: err.message,
-      fix: 'Check GMAIL_USER and GMAIL_APP_PASSWORD in Render environment variables'
-    });
-  }
+  });
+
+  request.on('error', (err) => {
+    res.json({ success: false, error: err.message });
+  });
+
+  request.write(body);
+  request.end();
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
@@ -116,7 +142,7 @@ mongoose.connect(MONGO_URI)
       console.log(`✅ Server running on port ${PORT}`);
       console.log(`   OWNER_EMAIL    : ${process.env.OWNER_EMAIL    || '⚠️ NOT SET'}`);
       console.log(`   OWNER_PASSWORD : ${process.env.OWNER_PASSWORD ? '✅ SET' : '⚠️ NOT SET'}`);
-      console.log(`   BREVO_USER     : ${process.env.BREVO_USER     || '⚠️ NOT SET'}`);
+      console.log(`   BREVO_API_KEY  : ${process.env.BREVO_API_KEY  ? '✅ SET' : '⚠️ NOT SET'}`);
       const { verifySMTP } = require('./config/mailer');
       await verifySMTP();
     });

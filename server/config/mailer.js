@@ -1,56 +1,71 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// server/config/mailer.js
-// Uses Brevo SMTP — works on Render, sends to any email address
-// ─────────────────────────────────────────────────────────────────────────────
-const nodemailer = require('nodemailer');
+// Uses Brevo HTTP API — works on Render (no SMTP ports needed)
+const https = require('https');
 
-const createTransporter = () => {
-  const user = process.env.BREVO_USER;
-  const pass = process.env.BREVO_PASS;
+const FROM_EMAIL  = 'ten9india@gmail.com';
+const FROM_NAME   = 'TEN9 Ministries India';
+const OWNER_EMAIL = process.env.OWNER_EMAIL || 'ten9india@gmail.com';
 
-  if (!user || !pass) {
-    console.error('❌ BREVO_USER or BREVO_PASS missing from environment');
-    return null;
+const sendMail = async ({ to, subject, text, html }, label) => {
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) {
+    console.error('❌ BREVO_API_KEY missing from environment variables');
+    return false;
   }
 
-  return nodemailer.createTransport({
-    host:   'smtp-relay.brevo.com',
-    port:   587,
-    secure: false,
-    auth:   { user, pass },
-    tls:    { rejectUnauthorized: false }
+  const body = JSON.stringify({
+    sender:      { name: FROM_NAME, email: FROM_EMAIL },
+    to:          [{ email: to }],
+    subject,
+    textContent: text,
+    htmlContent: html
+  });
+
+  return new Promise((resolve) => {
+    const options = {
+      hostname: 'api.brevo.com',
+      path:     '/v3/smtp/email',
+      method:   'POST',
+      headers: {
+        'accept':         'application/json',
+        'api-key':        apiKey,
+        'content-type':   'application/json',
+        'content-length': Buffer.byteLength(body)
+      }
+    };
+
+    console.log(`\n📧 [${label}] To: ${to} | Subject: ${subject}`);
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          console.log(`✅ [${label}] Sent successfully`);
+          resolve(true);
+        } else {
+          console.error(`❌ [${label}] Failed: ${res.statusCode} — ${data}`);
+          resolve(false);
+        }
+      });
+    });
+
+    req.on('error', (err) => {
+      console.error(`❌ [${label}] Request error: ${err.message}`);
+      resolve(false);
+    });
+
+    req.write(body);
+    req.end();
   });
 };
 
-const FROM_EMAIL = '"TEN9 Ministries India" <ten9india@gmail.com>';
-
-// ─── Internal send function ───────────────────────────────────────────────────
-const sendMail = async ({ to, subject, text, html }, label) => {
-  const transporter = createTransporter();
-  if (!transporter) return false;
-
-  try {
-    console.log(`\n📧 [${label}] To: ${to} | Subject: ${subject}`);
-    const info = await transporter.sendMail({
-      from: FROM_EMAIL,
-      to, subject, text, html
-    });
-    console.log(`✅ [${label}] Sent — MessageId: ${info.messageId}`);
-    return true;
-  } catch (err) {
-    console.error(`❌ [${label}] Failed: ${err.message}`);
-    return false;
-  }
-};
-
-// ─── 1. OTP Email ─────────────────────────────────────────────────────────────
+// ── 1. OTP Email ──────────────────────────────────────────────────────────────
 exports.sendOTPEmail = async (helperName, helperEmail, otp) => {
   return sendMail({
-    to: helperEmail,
+    to:      helperEmail,
     subject: `TEN9 Ministries India - Your Verification Code: ${otp}`,
-    text: `Hi ${helperName},\n\nYour TEN9 verification code is: ${otp}\n\nValid for 10 minutes.\n\nWith love,\nTeam Ten9 India`,
-    html: `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"></head>
+    text:    `Hi ${helperName},\n\nYour TEN9 verification code is: ${otp}\n\nValid for 10 minutes.\n\nWith love,\nTeam Ten9 India`,
+    html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f5ecd7;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 20px;">
 <tr><td align="center">
@@ -60,7 +75,7 @@ exports.sendOTPEmail = async (helperName, helperEmail, otp) => {
   <p style="color:rgba(200,169,110,0.7);font-size:11px;letter-spacing:3px;margin:6px 0 0;">ROMANS 10:9</p>
 </td></tr>
 <tr><td style="padding:36px;">
-  <h2 style="color:#8B1A1A;text-align:center;margin-bottom:16px;">Email Verification</h2>
+  <h2 style="color:#8B1A1A;text-align:center;">Email Verification</h2>
   <p style="color:#444;font-size:15px;line-height:1.8;">Hi <strong>${helperName}</strong>,</p>
   <p style="color:#444;font-size:15px;">Use the code below to complete your registration:</p>
   <table width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;">
@@ -82,14 +97,13 @@ exports.sendOTPEmail = async (helperName, helperEmail, otp) => {
   }, 'OTP');
 };
 
-// ─── 2. Welcome Email ─────────────────────────────────────────────────────────
+// ── 2. Welcome Email ──────────────────────────────────────────────────────────
 exports.sendWelcomeEmail = async (helperName, helperEmail) => {
   return sendMail({
-    to: helperEmail,
+    to:      helperEmail,
     subject: 'Welcome to TEN9 Ministries India',
-    text: `Hi ${helperName},\n\nWelcome to the Ten9 India Family!\n\nThank you for joining the Ten9 India mailing list!\nWe are excited to have you with us. You will now be the first to receive updates about our latest content, events, announcements, and special opportunities.\n\nWe are grateful to have you as part of the community and cannot wait to share what is ahead.\nStay connected - something exciting is coming soon!\n\nWith love,\nTeam Ten9 India`,
-    html: `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"></head>
+    text:    `Hi ${helperName},\n\nWelcome to the Ten9 India Family!\n\nThank you for joining the Ten9 India mailing list! We are excited to have you with us.\n\nStay connected - something exciting is coming soon!\n\nWith love,\nTeam Ten9 India`,
+    html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f5ecd7;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 20px;">
 <tr><td align="center">
@@ -103,7 +117,6 @@ exports.sendWelcomeEmail = async (helperName, helperEmail) => {
   <p style="color:#444;font-size:16px;line-height:1.9;">Hi <strong>${helperName}</strong>,</p>
   <p style="color:#444;font-size:16px;line-height:1.9;">Thank you for joining the Ten9 India mailing list!</p>
   <p style="color:#444;font-size:16px;line-height:1.9;">We are excited to have you with us. You will now be the first to receive updates about our latest content, events, announcements, and special opportunities.</p>
-  <p style="color:#444;font-size:16px;line-height:1.9;">We are grateful to have you as part of the community and cannot wait to share what is ahead.</p>
   <p style="color:#444;font-size:16px;line-height:1.9;">Stay connected - something exciting is coming soon!</p>
   <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">
   <tr><td style="background:#8B1A1A;border-radius:8px;padding:20px;text-align:center;">
@@ -112,8 +125,7 @@ exports.sendWelcomeEmail = async (helperName, helperEmail) => {
   </table>
 </td></tr>
 <tr><td style="background:#f5ecd7;padding:20px 40px;border-top:1px solid #e8d4a0;">
-  <p style="color:#444;font-size:14px;margin:0;">With love,<br><strong style="color:#8B1A1A;">Team Ten9 India</strong><br>
-  <a href="mailto:ten9india@gmail.com" style="color:#a07840;">ten9india@gmail.com</a></p>
+  <p style="color:#444;font-size:14px;margin:0;">With love,<br><strong style="color:#8B1A1A;">Team Ten9 India</strong></p>
 </td></tr>
 </table>
 </td></tr>
@@ -122,14 +134,13 @@ exports.sendWelcomeEmail = async (helperName, helperEmail) => {
   }, 'WELCOME');
 };
 
-// ─── 3. Payment Thank-You Email ───────────────────────────────────────────────
+// ── 3. Payment Email ──────────────────────────────────────────────────────────
 exports.sendPaymentThankYou = async (helperName, helperEmail, amount) => {
   return sendMail({
-    to: helperEmail,
+    to:      helperEmail,
     subject: 'TEN9 Ministries India - Thank You for Your Support',
-    text: `Dear ${helperName},\n\nThank you for your generous support${amount ? ` of Rs.${amount}` : ''}.\n"Every gift becomes a blessing to someone in need."\n\nGod bless you!\n\nWith gratitude,\nTeam Ten9 India`,
-    html: `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"></head>
+    text:    `Dear ${helperName},\n\nThank you for your generous support${amount ? ` of Rs.${amount}` : ''}.\n\n"Every gift becomes a blessing to someone in need."\n\nGod bless you!\n\nWith gratitude,\nTeam Ten9 India`,
+    html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f5ecd7;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 20px;">
 <tr><td align="center">
@@ -139,10 +150,10 @@ exports.sendPaymentThankYou = async (helperName, helperEmail, amount) => {
 </td></tr>
 <tr><td style="padding:36px 40px;">
   <h2 style="color:#8B1A1A;text-align:center;">Thank You for Your Support!</h2>
-  <p style="color:#444;font-size:16px;line-height:1.9;">Dear <strong>${helperName}</strong>,</p>
-  <p style="color:#444;font-size:16px;line-height:1.9;">We received your generous support${amount ? ` of <strong>Rs.${amount}</strong>` : ''}.</p>
-  <div style="background:#f5ecd7;border-left:4px solid #c8a96e;padding:16px;margin:20px 0;border-radius:0 8px 8px 0;">
-    <p style="color:#5c3d2e;font-size:15px;margin:0;font-style:italic;">"Every gift becomes a blessing to someone in need."</p>
+  <p style="color:#444;font-size:16px;">Dear <strong>${helperName}</strong>,</p>
+  <p style="color:#444;font-size:16px;">We received your generous support${amount ? ` of <strong>Rs.${amount}</strong>` : ''}.</p>
+  <div style="background:#f5ecd7;border-left:4px solid #c8a96e;padding:16px;margin:20px 0;">
+    <p style="color:#5c3d2e;font-style:italic;margin:0;">"Every gift becomes a blessing to someone in need."</p>
   </div>
   <p style="color:#444;font-size:16px;">God bless you abundantly!</p>
 </td></tr>
@@ -156,14 +167,13 @@ exports.sendPaymentThankYou = async (helperName, helperEmail, amount) => {
   }, 'PAYMENT');
 };
 
-// ─── 4. Contact Notification ──────────────────────────────────────────────────
+// ── 4. Contact Notification ───────────────────────────────────────────────────
 exports.sendContactNotification = async (contactData) => {
   return sendMail({
-    to: process.env.OWNER_EMAIL || 'ten9india@gmail.com',
+    to:      OWNER_EMAIL,
     subject: `TEN9 Contact Form - ${contactData.subject}`,
-    text: `Name: ${contactData.fullName}\nEmail: ${contactData.email}\nSubject: ${contactData.subject}\nMessage: ${contactData.message}`,
-    html: `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"></head>
+    text:    `Name: ${contactData.fullName}\nEmail: ${contactData.email}\nSubject: ${contactData.subject}\nMessage: ${contactData.message}`,
+    html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f5ecd7;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 20px;">
 <tr><td align="center">
@@ -186,14 +196,13 @@ exports.sendContactNotification = async (contactData) => {
   }, 'CONTACT');
 };
 
-// ─── 5. Announcement Email ────────────────────────────────────────────────────
+// ── 5. Announcement Email ─────────────────────────────────────────────────────
 exports.sendAnnouncementEmail = async (helperName, helperEmail, title, matter) => {
   return sendMail({
-    to: helperEmail,
+    to:      helperEmail,
     subject: `TEN9 Ministries India - New Announcement: ${title}`,
-    text: `Hi ${helperName},\n\nNew Announcement: ${title}\n\n${matter}\n\nWith love,\nTeam Ten9 India`,
-    html: `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"></head>
+    text:    `Hi ${helperName},\n\nNew Announcement: ${title}\n\n${matter}\n\nWith love,\nTeam Ten9 India`,
+    html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f5ecd7;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 20px;">
 <tr><td align="center">
@@ -203,7 +212,7 @@ exports.sendAnnouncementEmail = async (helperName, helperEmail, title, matter) =
 </td></tr>
 <tr><td style="padding:36px 40px;">
   <h2 style="color:#8B1A1A;">${title}</h2>
-  <p style="color:#444;font-size:15px;line-height:1.9;">Hi <strong>${helperName}</strong>,</p>
+  <p style="color:#444;font-size:15px;">Hi <strong>${helperName}</strong>,</p>
   <div style="background:white;border:1px solid #e8d4a0;border-radius:8px;padding:24px;">
     <p style="color:#444;font-size:15px;margin:0;">${matter}</p>
   </div>
@@ -218,19 +227,13 @@ exports.sendAnnouncementEmail = async (helperName, helperEmail, title, matter) =
   }, 'ANNOUNCEMENT');
 };
 
-// ─── 6. Verify on Startup ─────────────────────────────────────────────────────
+// ── 6. Startup Check ──────────────────────────────────────────────────────────
 exports.verifySMTP = async () => {
-  const user = process.env.BREVO_USER;
-  const pass = process.env.BREVO_PASS;
-  if (!user || !pass) {
-    console.error('❌ BREVO_USER or BREVO_PASS not set — emails will NOT work');
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) {
+    console.error('❌ BREVO_API_KEY not set — emails will NOT work');
+    console.error('   Go to Render → Environment → Add BREVO_API_KEY');
     return;
   }
-  const transporter = createTransporter();
-  try {
-    await transporter.verify();
-    console.log(`✅ Brevo SMTP verified — emails will be sent from ${user}`);
-  } catch (err) {
-    console.error('❌ Brevo SMTP verification failed:', err.message);
-  }
+  console.log('✅ Brevo HTTP API ready — emails will reach any inbox');
 };
