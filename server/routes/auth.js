@@ -77,7 +77,10 @@ router.post('/helper/send-otp', async (req, res) => {
     const sent = await sendOTPEmail(name.trim(), cleanEmail, otp);
     if (!sent) {
       delete signupOtpStore[cleanEmail];
-      return res.status(500).json({ message: 'Failed to send OTP. Check SMTP settings.' });
+      return res.status(500).json({ 
+        message: 'Failed to send verification email. Please try again in a moment.',
+        debug: 'Check Render logs for exact error'
+      });
     }
 
     return res.json({ message: `Verification code sent to ${cleanEmail}. Valid for 10 minutes.` });
