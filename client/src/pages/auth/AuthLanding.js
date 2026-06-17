@@ -8,7 +8,6 @@ const AuthLanding = () => {
       <div className="auth-hero">
         <div className="auth-hero-overlay"></div>
         <div className="auth-hero-content">
-          <div className="auth-cross">✝</div>
           <h1>TEN9 Ministries Portal</h1>
           <p>Sign in to access the ministry portal</p>
         </div>

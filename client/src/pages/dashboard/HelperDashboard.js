@@ -8,7 +8,7 @@ import './DashboardExtra.css';
 const MINISTRY_PAGES = [
   { key:'home', label:'Home', icon:'🏠', path:'/', desc:'Ministry homepage' },
   { key:'about', label:'About Us', icon:'📖', path:'/about', desc:'Our story & mission' },
-  { key:'whatwedo', label:'What We Do', icon:'✝', path:'/what-we-do', desc:'Ministries & services' },
+  { key:'whatwedo', label:'What We Do', icon:'', path:'/what-we-do', desc:'Ministries & services' },
   { key:'building', label:'Building Projects', icon:'🏗️', path:'/building-projects', desc:'Current constructions' },
   { key:'christmas', label:'Project Christmas 2026', icon:'🎄', path:'/christmas-2026', desc:'Christmas mission' },
   { key:'childcare', label:'Child Care', icon:'👶', path:'/child-care', desc:'Child care ministry' },
@@ -19,7 +19,7 @@ const MINISTRY_PAGES = [
 
 const HelperDashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('profile');
   const [selectedPage, setSelectedPage] = useState(null);
   const [pageData, setPageData] = useState(null);
   const [loadingPage, setLoadingPage] = useState(false);
@@ -71,7 +71,7 @@ const HelperDashboard = () => {
           {c.bibleVerse&&<div className="content-block verse"><label>Bible Verse</label><p>{c.bibleVerse}</p></div>}
           {c.goal&&<div className="content-block"><label>Goal</label><p>{c.goal}</p></div>}
           {c.purpose&&<div className="content-block"><label>Purpose</label><p>{c.purpose}</p></div>}
-          {c.passions?.length>0&&<div className="content-block"><label>Passions</label><ul className="content-list">{c.passions.map((p,i)=><li key={i}>✝ {p}</li>)}</ul></div>}
+          {c.passions?.length>0&&<div className="content-block"><label>Passions</label><ul className="content-list">{c.passions.map((p,i)=><li key={i}>{p}</li>)}</ul></div>}
           {c.programs?.length>0&&<div className="content-block"><label>Featured Programs</label><ul className="content-list">{c.programs.map((p,i)=><li key={i}>• {p}</li>)}</ul></div>}
           {c.services?.length>0&&<div className="content-block"><label>Services</label>{c.services.map((s,i)=><div key={i} className="content-sub-item"><strong>{s.name}</strong><p>{s.description}</p></div>)}</div>}
           {c.projects?.length>0&&<div className="content-block"><label>Projects</label><ul className="content-list">{c.projects.map((p,i)=><li key={i}>🏗️ {p}</li>)}</ul></div>}
@@ -90,7 +90,6 @@ const HelperDashboard = () => {
     <div className="dashboard-page">
       <div className="dash-sidebar">
         <div className="dash-logo">
-          <span className="dash-cross">✝</span>
           <div><div className="dash-ministry">TEN9 Partner</div><div className="dash-name">{user?.name}</div></div>
         </div>
         <nav className="dash-nav">
@@ -122,7 +121,7 @@ const HelperDashboard = () => {
                 </div>
               </div>
               <div className="overview-welcome">
-                <h3>You're Part of the TEN9 Family ✝</h3>
+                <h3>You're Part of the TEN9 Family</h3>
                 <p>Stay connected with the ministry. Browse announcements, view page content, and see our supporters. You'll receive email notifications for new announcements.</p>
                 <div className="quick-actions" style={{marginTop:'20px'}}>
                   <button className="btn-primary" onClick={()=>setActiveTab('announcements')}>📢 View Announcements {unreadCount>0&&`(${unreadCount} new)`}</button>
@@ -188,7 +187,7 @@ const HelperDashboard = () => {
                 <div className="helper-supporters-grid">
                   {supporters.map(s=>(
                     <div key={s._id} className="helper-sup-card">
-                      <img src={`/uploads/${s.image}`} alt={s.name} onError={e=>{e.target.src='https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=200&q=80';}} />
+                      <img src={`/uploads/${s.image}`} alt={s.name} onError={e=>{e.target.style.display='none';}} />
                       <div className="helper-sup-name">{s.name}</div>
                     </div>
                   ))}
@@ -213,7 +212,7 @@ const HelperDashboard = () => {
                 </div>
               </div>
               <div className="overview-welcome">
-                <h3>Your Role in TEN9 Ministries ✝</h3>
+                <h3>Your Role in TEN9 Ministries</h3>
                 <p>As a helper, you are a valued part of our community. Stay connected, view ministry updates, and be ready to serve. God bless you!</p>
               </div>
             </div>

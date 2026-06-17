@@ -7,7 +7,7 @@ import './Dashboard.css';
 const PAGES = [
   { key: 'home', label: '🏠 Home' },
   { key: 'about', label: '📖 About Us' },
-  { key: 'whatwedo', label: '✝ What We Do' },
+  { key: 'whatwedo', label: 'What We Do' },
   { key: 'building', label: '🏗️ Building Projects' },
   { key: 'christmas', label: '🎄 Christmas 2026' },
   { key: 'childcare', label: '👶 Child Care' },
@@ -27,6 +27,7 @@ const OwnerDashboard = () => {
   const [supporters, setSupporters] = useState([]);
   const [saving, setSaving] = useState(false);
   const [loadingPage, setLoadingPage] = useState(false);
+  const [brokenSupIds, setBrokenSupIds] = useState({});
 
   // Announcement form
   const [annForm, setAnnForm] = useState({ title: '', matter: '' });
@@ -73,12 +74,18 @@ const OwnerDashboard = () => {
 
   const savePage = async () => {
     setSaving(true);
-    try { await API.put(`/pages/${activePage}`, pageData); toast.success('Page updated! ✝'); } catch { toast.error('Failed to save'); }
+    try { await API.put(`/pages/${activePage}`, pageData); toast.success('Page updated!'); } catch { toast.error('Failed to save'); }
     setSaving(false);
   };
 
   const markRead = async (id) => {
     try { await API.put(`/contact/${id}/read`); setContacts(contacts.map(c => c._id === id ? { ...c, read: true } : c)); } catch {}
+  };
+
+  const deleteMessage = async (id) => {
+    if (!window.confirm('Delete this message? This cannot be undone.')) return;
+    try { await API.delete(`/contact/${id}`); setContacts(contacts.filter(c => c._id !== id)); toast.success('Message deleted'); }
+    catch { toast.error('Failed to delete message'); }
   };
 
   const updateContent = (key, value) => setPageData(prev => ({ ...prev, content: { ...prev.content, [key]: value } }));
@@ -128,7 +135,7 @@ const OwnerDashboard = () => {
       fd.append('name', supForm.name);
       fd.append('image', supImage);
       await API.post('/owner/supporters', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
-      toast.success('Partner added! ✝');
+      toast.success('Partner added!');
       setSupForm({ name: '' }); setSupImage(null); setSupImagePreview(null);
       if (supFileRef.current) supFileRef.current.value = '';
       fetchSupporters();
@@ -138,6 +145,12 @@ const OwnerDashboard = () => {
 
   const deleteSupporter = async (id) => {
     try { await API.delete(`/owner/supporters/${id}`); toast.success('Deleted'); fetchSupporters(); } catch {}
+  };
+
+  const deleteHelper = async (id) => {
+    if (!window.confirm('Remove this registered partner? This cannot be undone.')) return;
+    try { await API.delete(`/owner/helpers/${id}`); toast.success('Partner removed'); fetchHelpers(); }
+    catch { toast.error('Failed to remove partner'); }
   };
 
   const sendPaymentEmail = async () => {
@@ -222,7 +235,6 @@ const OwnerDashboard = () => {
     <div className="dashboard-page">
       <div className="dash-sidebar">
         <div className="dash-logo">
-          <span className="dash-cross">✝</span>
           <div><div className="dash-ministry">TEN9 Owner</div><div className="dash-name">{user?.name}</div></div>
         </div>
         <nav className="dash-nav">
@@ -255,7 +267,7 @@ const OwnerDashboard = () => {
                 <div className="stat-card"><div className="stat-card-icon">📬</div><div className="stat-card-num">{counts.unreadContacts}</div><div className="stat-card-label">Unread Messages</div></div>
               </div>
               <div className="overview-welcome">
-                <h3>Welcome back! ✝</h3>
+                <h3>Welcome back!</h3>
                 <p>You have full control over all ministry pages. Post announcements to notify all helpers, add supporters, and manage everything from here.</p>
                 <div className="quick-actions">
                   <button className="btn-primary" onClick={()=>setActiveTab('announce')}>📢 Post Announcement</button>
@@ -365,7 +377,7 @@ const OwnerDashboard = () => {
                     </div>
                   </div>
                   <button type="submit" className="btn-save" disabled={supSubmitting} style={{padding:'12px 28px'}}>
-                    {supSubmitting ? 'Adding...' : '✝ Add Partner'}
+                    {supSubmitting ? 'Adding...' : 'Add Partner'}
                   </button>
                 </form>
               </div>
@@ -375,7 +387,13 @@ const OwnerDashboard = () => {
                   <div className="empty-state"><span>🌟</span><p>No partners added yet.</p></div>
                 ) : supporters.map(s=>(
                   <div key={s._id} className="sup-card">
-                    <img src={`/uploads/${s.image}`} alt={s.name} onError={e=>{e.target.src='https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=200&q=80';}} />
+                    {!brokenSupIds[s._id] && (
+                      <img
+                        src={`/uploads/${s.image}`}
+                        alt={s.name}
+                        onError={()=>setBrokenSupIds(prev=>({ ...prev, [s._id]: true }))}
+                      />
+                    )}
                     <div className="sup-card-name">{s.name}</div>
                     <button className="btn-delete-sm" onClick={()=>deleteSupporter(s._id)}>🗑</button>
                   </div>
@@ -393,7 +411,7 @@ const OwnerDashboard = () => {
               ) : (
                 <div className="helpers-table-wrap">
                   <table className="data-table">
-                    <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Country</th><th>City</th><th>Contact</th><th>Joined</th></tr></thead>
+                    <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Country</th><th>City</th><th>Contact</th><th>Joined</th><th>Action</th></tr></thead>
                     <tbody>
                       {helpers.map((h,i)=>(
                         <tr key={h._id}>
@@ -404,6 +422,7 @@ const OwnerDashboard = () => {
                           <td>{h.city}</td>
                           <td>{h.contact}</td>
                           <td>{new Date(h.createdAt).toLocaleDateString()}</td>
+                          <td><button className="btn-delete-sm" onClick={()=>deleteHelper(h._id)}>🗑 Delete</button></td>
                         </tr>
                       ))}
                     </tbody>
@@ -427,6 +446,7 @@ const OwnerDashboard = () => {
                         <div className="msg-from"><strong>{msg.fullName}</strong><span>{msg.email}</span></div>
                         <div className="msg-meta">
                           <span className="msg-date">{msg.createdAt ? new Date(msg.createdAt).toLocaleDateString('en-IN') : 'N/A'}</span>
+                          <button className="btn-delete-sm" onClick={()=>deleteMessage(msg._id)}>🗑 Delete</button>
                           {!msg.read&&<button className="btn-mark-read" onClick={()=>markRead(msg._id)}>Mark Read</button>}
                           {msg.read&&<span className="read-badge">✓ Read</span>}
                         </div>

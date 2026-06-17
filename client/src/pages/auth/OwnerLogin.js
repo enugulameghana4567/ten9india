@@ -29,7 +29,6 @@ const OwnerLogin = () => {
     <div className="auth-page">
       <div className="auth-form-container">
         <div className="auth-form-header">
-          <span className="auth-form-cross">👑</span>
           <h2>Owner Login</h2>
           <p>Access the TEN9 Ministry dashboard</p>
         </div>
@@ -56,7 +55,7 @@ const OwnerLogin = () => {
             />
           </div>
           <button type="submit" className="auth-submit-btn" disabled={loading}>
-            {loading ? 'Logging in...' : '✝ Login as Owner'}
+            {loading ? 'Logging in...' : 'Login as Owner'}
           </button>
         </form>
         <div className="auth-footer-link" style={{ marginTop: '16px' }}>

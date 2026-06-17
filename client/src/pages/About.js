@@ -30,26 +30,30 @@ const About = () => {
               <h2>Who We Are</h2>
               <div className="gold-bar"></div>
               <p className="about-desc">{c.description || 'TEN9 Ministries India is a Christ-centered ministry inspired by Epistle to the Romans 10:9, carrying the message of salvation, hope, and transformation through Jesus Christ.'}</p>
+
+              <div className="passions">
+                <h3>We Are Passionate About:</h3>
+                <ul>
+                  {(c.passions || [
+                    'Leading people into a deeper relationship with Jesus',
+                    "Raising a generation rooted in God's Word",
+                    'Spreading grace and hope to every community'
+                  ]).map((p, i) => (
+                    <li key={i}>{p}</li>
+                  ))}
+                </ul>
+              </div>
+
               <div className="mission-vision">
-                <div className="mv-card">
-                  <h3>OUR MISSION</h3>
-                  <p>{c.mission || 'To proclaim Jesus Christ, inspire faith, and transform lives through the power of the Gospel.'}</p>
-                </div>
                 <div className="mv-card">
                   <h3>OUR VISION</h3>
                   <p>{c.vision || 'To see lives restored, hearts revived, and nations touched by the love of Christ.'}</p>
                 </div>
-              </div>
-              {c.passions && (
-                <div className="passions">
-                  <h3>We Are Passionate About:</h3>
-                  <ul>
-                    {c.passions.map((p, i) => (
-                      <li key={i}><span className="passion-check">✝</span>{p}</li>
-                    ))}
-                  </ul>
+                <div className="mv-card">
+                  <h3>OUR MISSION</h3>
+                  <p>{c.mission || 'To proclaim Jesus Christ, inspire faith, and transform lives through the power of the Gospel.'}</p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>

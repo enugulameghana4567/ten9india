@@ -6,12 +6,17 @@ import './Supporters.css';
 const Partners = () => {
   const [supporters, setSupporters] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [brokenIds, setBrokenIds] = useState({});
 
   useEffect(() => {
     API.get('/public/supporters')
       .then(r => { setSupporters(r.data); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
+
+  const markBroken = (id) => setBrokenIds(prev => ({ ...prev, [id]: true }));
+
+  const visibleSupporters = supporters.filter(s => s.image && !brokenIds[s._id]);
 
   return (
     <div className="supporters-page">
@@ -29,28 +34,27 @@ const Partners = () => {
 
           {loading ? (
             <div className="supporters-loading">
-              <div className="loading-cross">✝</div>
               <p>Loading partners...</p>
             </div>
-          ) : supporters.length === 0 ? (
+          ) : visibleSupporters.length === 0 ? (
             <div className="supporters-empty">
               <p>Partner profiles coming soon. Be the first to join us!</p>
               <a href="/get-involved" className="btn-primary">Get Involved</a>
             </div>
           ) : (
             <div className="supporters-grid">
-              {supporters.map(s => (
+              {visibleSupporters.map(s => (
                 <div key={s._id} className="supporter-card">
                   <div className="supporter-img-wrap">
                     <img
                       src={`/uploads/${s.image}`}
                       alt={s.name}
-                      onError={e => { e.target.src = 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=300&q=80'; }}
+                      onError={() => markBroken(s._id)}
                     />
                   </div>
                   <div className="supporter-info">
                     <h3>{s.name}</h3>
-                    <span className="supporter-badge">✝ Partner</span>
+                    <span className="supporter-badge">Partner</span>
                   </div>
                 </div>
               ))}

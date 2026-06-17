@@ -28,7 +28,6 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   if (loading) return (
     <div style={{ display:'flex', justifyContent:'center', alignItems:'center', height:'100vh', background:'var(--cream)' }}>
       <div style={{ textAlign:'center' }}>
-        <div style={{ fontSize:'3rem', color:'var(--crimson)' }}>✝</div>
         <p style={{ color:'var(--crimson)', fontFamily:'Playfair Display,serif', fontSize:'1.2rem' }}>Loading...</p>
       </div>
     </div>

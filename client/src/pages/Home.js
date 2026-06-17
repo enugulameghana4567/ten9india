@@ -25,7 +25,7 @@ const Home = () => {
       <section className="hero" style={{ backgroundImage: `url(https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?w=1600&q=80)` }}>
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <div className="hero-badge">✝ Romans 10:9</div>
+          <div className="hero-badge">Romans 10:9</div>
           <h1 className="hero-title">Sharing the Love of Christ Across India</h1>
           <p className="hero-sub">{data?.subtitle || 'TEN9 Ministries India is committed to spreading the Gospel, transforming lives, caring for children, and serving communities through faith, compassion, and action.'}</p>
           <div className="hero-buttons">
@@ -65,9 +65,17 @@ const Home = () => {
           <h2 className="section-title">Featured Programs</h2>
           <div className="gold-divider"></div>
           <p className="section-subtitle">Serving communities through faith, compassion, and action</p>
-          <div className="programs-grid">
+          <div
+            className="programs-grid"
+            style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '24px' }}
+          >
             {programs.map(p => (
-              <Link to={programLinks[p] || '/'} key={p} className="program-card">
+              <Link
+                to={programLinks[p] || '/'}
+                key={p}
+                className="program-card"
+                style={{ flex: '0 1 280px', maxWidth: '320px' }}
+              >
                 <h3>{p}</h3>
                 <span className="program-arrow">→</span>
               </Link>
@@ -90,13 +98,14 @@ const Home = () => {
 
       {/* CTA */}
       <section className="cta-section">
-        <div className="container cta-inner">
-          <div className="cta-cross">✝</div>
-          <h2>Be a Part of the Mission</h2>
-          <p>Your support, prayers, and involvement make a difference in the lives of countless families and children.</p>
-          <div className="cta-buttons">
-            <Link to="/give" className="btn-primary">Give</Link>
-            <Link to="/get-involved" className="btn-outline">Get Involved</Link>
+        <div className="container">
+          <div className="cta-inner" style={{ boxSizing: 'border-box', maxWidth: '100%', overflow: 'hidden' }}>
+            <h2>Be a Part of the Mission</h2>
+            <p>Your support, prayers, and involvement make a difference in the lives of countless families and children.</p>
+            <div className="cta-buttons" style={{ flexWrap: 'wrap' }}>
+              <Link to="/give" className="btn-primary">Give</Link>
+              <Link to="/get-involved" className="btn-outline">Get Involved</Link>
+            </div>
           </div>
         </div>
       </section>

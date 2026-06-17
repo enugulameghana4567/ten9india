@@ -37,7 +37,6 @@ const HelperLogin = () => {
       <div className="auth-form-container">
 
         <div className="auth-form-header">
-          <span className="auth-form-cross">🤝</span>
           <h2>Partner Login</h2>
           <p>Welcome back to TEN9 Ministries India</p>
         </div>

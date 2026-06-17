@@ -49,7 +49,7 @@ const Navbar = () => {
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} ref={menuRef}>
       <div className="nav-container">
 
-        {/* Brand with Logo */}
+        {/* Brand */}
         <Link to="/" className="nav-brand" onClick={() => setMenuOpen(false)}>
           <img
             src="/logo.png"
@@ -57,12 +57,9 @@ const Navbar = () => {
             className="nav-logo-img"
             onError={e => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
           />
-          <div className="nav-logo-fallback" style={{display:'none'}}>
-            <span className="nav-cross">&#10013;</span>
-            <div className="brand-text">
-              <span className="brand-name">TEN9 Ministries</span>
-              <span className="brand-sub">India</span>
-            </div>
+          <div className="brand-text" style={{display:'none'}}>
+            <span className="brand-name">TEN9 Ministries</span>
+            <span className="brand-sub">India</span>
           </div>
         </Link>
 

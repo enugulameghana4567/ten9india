@@ -65,7 +65,6 @@ const HelperSignup = () => {
       <div className="auth-form-container" style={{ maxWidth: '560px' }}>
 
         <div className="auth-form-header">
-          <span className="auth-form-cross">🤝</span>
           <h2>{step === 1 ? 'Join as Partner' : 'Verify Your Email'}</h2>
           <p>
             {step === 1

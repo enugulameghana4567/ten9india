@@ -8,7 +8,6 @@ const Footer = () => (
       <div className="container footer-grid">
         <div className="footer-brand">
           <div className="footer-logo">
-            <span className="footer-cross">✝</span>
             <div>
               <div className="footer-name">TEN9 Ministries India</div>
               <div className="footer-verse">Romans 10:9</div>
