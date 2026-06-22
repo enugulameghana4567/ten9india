@@ -6,7 +6,6 @@ import './Home.css';
 const programLinks = {
   'Gospel Outreach': '/what-we-do',
   'Community Help': '/what-we-do',
-  'Building Projects': '/building-projects',
 };
 
 const Home = () => {
@@ -16,8 +15,8 @@ const Home = () => {
     API.get('/pages/home').then(r => setData(r.data)).catch(() => {});
   }, []);
 
-  const programs = (data?.content?.programs || ['Gospel Outreach','Community Help','Building Projects'])
-    .filter(p => p !== 'Child Care Support' && p !== 'Christmas 2026 Mission');
+  const programs = (data?.content?.programs || ['Gospel Outreach','Community Help'])
+    .filter(p => p !== 'Child Care Support' && p !== 'Christmas 2026 Mission' && p !== 'Building Projects');
 
   return (
     <div className="home-page">
