@@ -32,7 +32,7 @@ const OwnerLogin = () => {
           <h2>Owner Login</h2>
           <p>Access the TEN9 Ministry dashboard</p>
         </div>
-        {error && <div className="auth-error">⚠ {error}</div>}
+        {error && <div className="auth-error">{error}</div>}
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Email Address *</label>
@@ -59,7 +59,7 @@ const OwnerLogin = () => {
           </button>
         </form>
         <div className="auth-footer-link" style={{ marginTop: '16px' }}>
-          <Link to="/auth">← Back</Link>
+          <Link to="/auth">Back</Link>
         </div>
       </div>
     </div>
