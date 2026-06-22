@@ -21,7 +21,6 @@ const Footer = () => (
           <Link to="/">Home</Link>
           <Link to="/about">About Us</Link>
           <Link to="/what-we-do">What We Do</Link>
-          <Link to="/building-projects">Building Projects</Link>
           <Link to="/get-involved">Get Involved</Link>
         </div>
         <div className="footer-links-col">
