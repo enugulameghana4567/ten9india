@@ -5,15 +5,12 @@ import { toast } from 'react-toastify';
 import './Dashboard.css';
 
 const PAGES = [
-  { key: 'home', label: '🏠 Home' },
-  { key: 'about', label: '📖 About Us' },
+  { key: 'home', label: 'Home' },
+  { key: 'about', label: 'About Us' },
   { key: 'whatwedo', label: 'What We Do' },
-  { key: 'building', label: '🏗️ Building Projects' },
-  { key: 'christmas', label: '🎄 Christmas 2026' },
-  { key: 'childcare', label: '👶 Child Care' },
-  { key: 'getinvolved', label: '🙌 Get Involved' },
-  { key: 'give', label: '💛 Your Give' },
-  { key: 'contact', label: '📧 Contact Us' },
+  { key: 'getinvolved', label: 'Get Involved' },
+  { key: 'give', label: 'Your Give' },
+  { key: 'contact', label: 'Contact Us' },
 ];
 
 const OwnerDashboard = () => {
@@ -107,7 +104,7 @@ const OwnerDashboard = () => {
       fd.append('matter', annForm.matter);
       annImages.forEach(img => fd.append('images', img));
       await API.post('/owner/announcements', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
-      toast.success('Announcement posted! All helpers notified by email. 📢');
+      toast.success('Announcement posted! All helpers notified by email.');
       setAnnForm({ title: '', matter: '' });
       setAnnImages([]); setAnnImagePreviews([]);
       if (annFileRef.current) annFileRef.current.value = '';
@@ -156,7 +153,7 @@ const OwnerDashboard = () => {
   const sendPaymentEmail = async () => {
     if (!payHelperId) { toast.error('Select a helper'); return; }
     setPaySending(true);
-    try { await API.post('/owner/payment-confirm', { helperId: payHelperId, amount: payAmount }); toast.success('Payment thank-you email sent! 💛'); setPayHelperId(''); setPayAmount(''); } catch { toast.error('Failed to send email'); }
+    try { await API.post('/owner/payment-confirm', { helperId: payHelperId, amount: payAmount }); toast.success('Payment thank-you email sent!'); setPayHelperId(''); setPayAmount(''); } catch { toast.error('Failed to send email'); }
     setPaySending(false);
   };
 
@@ -167,7 +164,7 @@ const OwnerDashboard = () => {
       <div className="page-editor">
         <div className="editor-header">
           <h3>{PAGES.find(p => p.key === activePage)?.label} — Page Editor</h3>
-          <button className="btn-save" onClick={savePage} disabled={saving}>{saving ? 'Saving...' : '💾 Save Changes'}</button>
+          <button className="btn-save" onClick={savePage} disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</button>
         </div>
         <div className="editor-section">
           <h4>Page Header</h4>
@@ -238,22 +235,22 @@ const OwnerDashboard = () => {
           <div><div className="dash-ministry">TEN9 Owner</div><div className="dash-name">{user?.name}</div></div>
         </div>
         <nav className="dash-nav">
-          <button className={activeTab==='overview'?'active':''} onClick={()=>setActiveTab('overview')}>📊 Overview</button>
-          <button className={activeTab==='pages'?'active':''} onClick={()=>setActiveTab('pages')}>📝 Manage Pages</button>
-          <button className={activeTab==='announce'?'active':''} onClick={()=>setActiveTab('announce')}>📢 Announcements</button>
-          <button className={activeTab==='supporters'?'active':''} onClick={()=>setActiveTab('supporters')}>🌟 Partners</button>
-          <button className={activeTab==='helpers'?'active':''} onClick={()=>setActiveTab('helpers')}>🤝 Partners ({counts.helpers})</button>
+          <button className={activeTab==='overview'?'active':''} onClick={()=>setActiveTab('overview')}>Overview</button>
+          <button className={activeTab==='pages'?'active':''} onClick={()=>setActiveTab('pages')}>Manage Pages</button>
+          <button className={activeTab==='announce'?'active':''} onClick={()=>setActiveTab('announce')}>Announcements</button>
+          <button className={activeTab==='supporters'?'active':''} onClick={()=>setActiveTab('supporters')}>Partners</button>
+          <button className={activeTab==='helpers'?'active':''} onClick={()=>setActiveTab('helpers')}>Partners ({counts.helpers})</button>
           <button className={activeTab==='messages'?'active':''} onClick={()=>{setActiveTab('messages');fetchContacts();}}>
-            ✉ Messages {counts.unreadContacts>0&&<span className="badge">{counts.unreadContacts}</span>}
+            Messages {counts.unreadContacts>0&&<span className="badge">{counts.unreadContacts}</span>}
           </button>
-          <button className={activeTab==='payment'?'active':''} onClick={()=>setActiveTab('payment')}>💛 Payment Confirm</button>
+          <button className={activeTab==='payment'?'active':''} onClick={()=>setActiveTab('payment')}>Payment Confirm</button>
         </nav>
       </div>
 
       <div className="dash-main">
         <div className="dash-topbar">
           <h2>{['overview','pages','announce','supporters','helpers','messages','payment'].includes(activeTab) && {overview:'Dashboard Overview',pages:'Manage Pages',announce:'Announcements',supporters:'Supporters',helpers:'Registered Partners',messages:'Contact Messages',payment:'Payment Confirmation'}[activeTab]}</h2>
-          <div className="dash-user-info"><span>👑 {user?.name}</span><span className="owner-badge">Owner</span></div>
+          <div className="dash-user-info"><span>{user?.name}</span><span className="owner-badge">Owner</span></div>
         </div>
 
         <div className="dash-content">
@@ -261,18 +258,18 @@ const OwnerDashboard = () => {
           {activeTab==='overview' && (
             <div>
               <div className="stat-cards">
-                <div className="stat-card"><div className="stat-card-icon">🤝</div><div className="stat-card-num">{counts.helpers}</div><div className="stat-card-label">Helpers</div></div>
-                <div className="stat-card"><div className="stat-card-icon">📢</div><div className="stat-card-num">{counts.announcements}</div><div className="stat-card-label">Announcements</div></div>
-                <div className="stat-card"><div className="stat-card-icon">🌟</div><div className="stat-card-num">{counts.supporters}</div><div className="stat-card-label">Supporters</div></div>
-                <div className="stat-card"><div className="stat-card-icon">📬</div><div className="stat-card-num">{counts.unreadContacts}</div><div className="stat-card-label">Unread Messages</div></div>
+                <div className="stat-card"><div className="stat-card-num">{counts.helpers}</div><div className="stat-card-label">Helpers</div></div>
+                <div className="stat-card"><div className="stat-card-num">{counts.announcements}</div><div className="stat-card-label">Announcements</div></div>
+                <div className="stat-card"><div className="stat-card-num">{counts.supporters}</div><div className="stat-card-label">Supporters</div></div>
+                <div className="stat-card"><div className="stat-card-num">{counts.unreadContacts}</div><div className="stat-card-label">Unread Messages</div></div>
               </div>
               <div className="overview-welcome">
                 <h3>Welcome back!</h3>
                 <p>You have full control over all ministry pages. Post announcements to notify all helpers, add supporters, and manage everything from here.</p>
                 <div className="quick-actions">
-                  <button className="btn-primary" onClick={()=>setActiveTab('announce')}>📢 Post Announcement</button>
-                  <button className="btn-outline" onClick={()=>setActiveTab('pages')}>📝 Edit Pages</button>
-                  <button className="btn-outline" onClick={()=>setActiveTab('supporters')}>🌟 Add Supporter</button>
+                  <button className="btn-primary" onClick={()=>setActiveTab('announce')}>Post Announcement</button>
+                  <button className="btn-outline" onClick={()=>setActiveTab('pages')}>Edit Pages</button>
+                  <button className="btn-outline" onClick={()=>setActiveTab('supporters')}>Add Supporter</button>
                 </div>
               </div>
             </div>
@@ -295,7 +292,7 @@ const OwnerDashboard = () => {
           {activeTab==='announce' && (
             <div>
               <div className="announce-form-card">
-                <h3>📢 Post New Announcement</h3>
+                <h3>Post New Announcement</h3>
                 <p className="announce-note">All registered helpers will be notified by email automatically.</p>
                 <form onSubmit={submitAnnouncement}>
                   <div className="form-group">
@@ -311,7 +308,7 @@ const OwnerDashboard = () => {
                     <div className="image-upload-area" onClick={()=>annFileRef.current.click()}>
                       <input ref={annFileRef} type="file" multiple accept="image/*" onChange={handleAnnImages} style={{display:'none'}} />
                       {annImagePreviews.length===0 ? (
-                        <div className="upload-placeholder"><span>🖼</span><p>Click to add images</p></div>
+                        <div className="upload-placeholder"><p>Click to add images</p></div>
                       ) : (
                         <div className="image-preview-row">
                           {annImagePreviews.map((src,i)=><img key={i} src={src} alt={`preview-${i}`} />)}
@@ -321,7 +318,7 @@ const OwnerDashboard = () => {
                     </div>
                   </div>
                   <button type="submit" className="btn-save" disabled={annSubmitting} style={{padding:'12px 28px'}}>
-                    {annSubmitting ? 'Posting...' : '📢 Post & Notify All Helpers'}
+                    {annSubmitting ? 'Posting...' : 'Post & Notify All Helpers'}
                   </button>
                 </form>
               </div>
@@ -329,16 +326,16 @@ const OwnerDashboard = () => {
               <div className="announce-list">
                 <h3>Previous Announcements ({announcements.length})</h3>
                 {announcements.length===0 ? (
-                  <div className="empty-state"><span>📢</span><p>No announcements yet.</p></div>
+                  <div className="empty-state"><p>No announcements yet.</p></div>
                 ) : announcements.map(ann=>(
                   <div key={ann._id} className="announce-card">
                     <div className="announce-card-header">
                       <div>
                         <h4>{ann.title}</h4>
                         <span className="announce-date">{ann.createdAt ? new Date(ann.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}) : 'N/A'}</span>
-                        <span className="announce-read-count">👁 {ann.readBy?.length||0} helpers read</span>
+                        <span className="announce-read-count">{ann.readBy?.length||0} helpers read</span>
                       </div>
-                      <button className="btn-delete" onClick={()=>deleteAnnouncement(ann._id)}>🗑 Delete</button>
+                      <button className="btn-delete" onClick={()=>deleteAnnouncement(ann._id)}>Delete</button>
                     </div>
                     <p className="announce-matter">{ann.matter}</p>
                     {ann.images?.length>0 && (
@@ -359,7 +356,7 @@ const OwnerDashboard = () => {
           {activeTab==='supporters' && (
             <div>
               <div className="announce-form-card">
-                <h3>🌟 Add New Partner</h3>
+                <h3>Add New Partner</h3>
                 <form onSubmit={submitSupporter}>
                   <div className="form-group">
                     <label>Partner Name *</label>
@@ -372,7 +369,7 @@ const OwnerDashboard = () => {
                       {supImagePreview ? (
                         <img src={supImagePreview} alt="preview" className="sup-preview" />
                       ) : (
-                        <div className="upload-placeholder"><span>👤</span><p>Click to upload photo</p></div>
+                        <div className="upload-placeholder"><p>Click to upload photo</p></div>
                       )}
                     </div>
                   </div>
@@ -384,7 +381,7 @@ const OwnerDashboard = () => {
 
               <div className="supporters-owner-grid">
                 {supporters.length===0 ? (
-                  <div className="empty-state"><span>🌟</span><p>No partners added yet.</p></div>
+                  <div className="empty-state"><p>No partners added yet.</p></div>
                 ) : supporters.map(s=>(
                   <div key={s._id} className="sup-card">
                     {!brokenSupIds[s._id] && (
@@ -395,7 +392,7 @@ const OwnerDashboard = () => {
                       />
                     )}
                     <div className="sup-card-name">{s.name}</div>
-                    <button className="btn-delete-sm" onClick={()=>deleteSupporter(s._id)}>🗑</button>
+                    <button className="btn-delete-sm" onClick={()=>deleteSupporter(s._id)}>Delete</button>
                   </div>
                 ))}
               </div>
@@ -407,7 +404,7 @@ const OwnerDashboard = () => {
             <div>
               <div className="section-header"><h3>Registered Partners ({helpers.length})</h3></div>
               {helpers.length===0 ? (
-                <div className="empty-state"><span>🤝</span><p>No partners registered yet.</p></div>
+                <div className="empty-state"><p>No partners registered yet.</p></div>
               ) : (
                 <div className="helpers-table-wrap">
                   <table className="data-table">
@@ -422,7 +419,7 @@ const OwnerDashboard = () => {
                           <td>{h.city}</td>
                           <td>{h.contact}</td>
                           <td>{new Date(h.createdAt).toLocaleDateString()}</td>
-                          <td><button className="btn-delete-sm" onClick={()=>deleteHelper(h._id)}>🗑 Delete</button></td>
+                          <td><button className="btn-delete-sm" onClick={()=>deleteHelper(h._id)}>Delete</button></td>
                         </tr>
                       ))}
                     </tbody>
@@ -437,7 +434,7 @@ const OwnerDashboard = () => {
             <div>
               <div className="section-header"><h3>Contact Messages ({contacts.length})</h3></div>
               {contacts.length===0 ? (
-                <div className="empty-state"><span>✉</span><p>No messages yet.</p></div>
+                <div className="empty-state"><p>No messages yet.</p></div>
               ) : (
                 <div className="messages-list">
                   {contacts.map(msg=>(
@@ -446,7 +443,7 @@ const OwnerDashboard = () => {
                         <div className="msg-from"><strong>{msg.fullName}</strong><span>{msg.email}</span></div>
                         <div className="msg-meta">
                           <span className="msg-date">{msg.createdAt ? new Date(msg.createdAt).toLocaleDateString('en-IN') : 'N/A'}</span>
-                          <button className="btn-delete-sm" onClick={()=>deleteMessage(msg._id)}>🗑 Delete</button>
+                          <button className="btn-delete-sm" onClick={()=>deleteMessage(msg._id)}>Delete</button>
                           {!msg.read&&<button className="btn-mark-read" onClick={()=>markRead(msg._id)}>Mark Read</button>}
                           {msg.read&&<span className="read-badge">✓ Read</span>}
                         </div>
@@ -464,7 +461,7 @@ const OwnerDashboard = () => {
           {activeTab==='payment' && (
             <div>
               <div className="announce-form-card">
-                <h3>💛 Send Payment Thank-You Email</h3>
+                <h3>Send Payment Thank-You Email</h3>
                 <p className="announce-note">When a helper makes a donation/payment, select them here to send a thank-you email.</p>
                 <div className="form-group">
                   <label>Select Helper *</label>
@@ -478,7 +475,7 @@ const OwnerDashboard = () => {
                   <input type="number" value={payAmount} onChange={e=>setPayAmount(e.target.value)} placeholder="e.g. 500" />
                 </div>
                 <button className="btn-save" onClick={sendPaymentEmail} disabled={paySending} style={{padding:'12px 28px'}}>
-                  {paySending ? 'Sending...' : '💛 Send Thank-You Email'}
+                  {paySending ? 'Sending...' : 'Send Thank-You Email'}
                 </button>
               </div>
             </div>
