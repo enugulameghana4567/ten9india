@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PageHero from '../components/PageHero';
 import API from '../utils/api';
 import './WhatWeDo.css';
-
-const icons = ['✝', '🤝', '🙏', '👥', '👶'];
-
 const WhatWeDo = () => {
   const [data, setData] = useState(null);
   useEffect(() => { API.get('/pages/whatwedo').then(r => setData(r.data)).catch(() => {}); }, []);
@@ -12,10 +9,8 @@ const WhatWeDo = () => {
     { name: 'Gospel Outreach', description: 'Sharing the Word of God through evangelism, prayer meetings, worship gatherings, and mission programs.' },
     { name: 'Community Support', description: 'Helping families and communities through food distribution, education support, and emergency assistance.' },
     { name: 'Prayer & Worship', description: 'Conducting worship events, spiritual counseling, and prayer support for individuals and families.' },
-    { name: 'Youth Ministry', description: 'Encouraging young people to grow spiritually and become future leaders rooted in faith.' },
-    { name: 'Child Care Mission', description: 'Providing care, education, love, and support for children in need.' }
+    { name: 'Youth Ministry', description: 'Encouraging young people to grow spiritually and become future leaders rooted in faith.' }
   ];
-
   return (
     <div className="whatwedo-page">
       <PageHero
@@ -31,7 +26,6 @@ const WhatWeDo = () => {
           <div className="services-grid">
             {services.map((s, i) => (
               <div className="service-card" key={i}>
-                <div className="service-icon">{icons[i] || '✝'}</div>
                 <h3>{s.name}</h3>
                 <p>{s.description}</p>
               </div>
@@ -49,7 +43,6 @@ const WhatWeDo = () => {
         </div>
       </section>
     </div>
-  );
+  ); 
 };
-
 export default WhatWeDo;
