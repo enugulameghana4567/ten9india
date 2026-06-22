@@ -13,8 +13,11 @@ const AuthLanding = () => {
         </div>
       </div>
       <div className="auth-cards-section">
-        <div className="container auth-cards-grid" style={{ justifyContent: 'center' }}>
-          <div className="auth-type-card">
+        <div
+          className="container"
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
+          <div className="auth-type-card" style={{ width: '100%', maxWidth: '420px' }}>
             <h2>Ministry Partner</h2>
             <p>Register or sign in to stay connected and receive ministry updates and announcements.</p>
             <div className="auth-type-buttons">
