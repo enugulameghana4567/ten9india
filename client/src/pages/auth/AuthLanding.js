@@ -13,18 +13,8 @@ const AuthLanding = () => {
         </div>
       </div>
       <div className="auth-cards-section">
-        <div className="container auth-cards-grid">
+        <div className="container auth-cards-grid" style={{ justifyContent: 'center' }}>
           <div className="auth-type-card">
-            <div className="auth-type-icon">👑</div>
-            <h2>Ministry Owner</h2>
-            <p>Access the owner dashboard to manage pages, view partners, and post announcements.</p>
-            <div className="auth-type-buttons">
-              <Link to="/auth/owner/login" className="btn-primary">Login as Owner</Link>
-            </div>
-          </div>
-          <div className="auth-divider"><span>OR</span></div>
-          <div className="auth-type-card">
-            <div className="auth-type-icon">🤝</div>
             <h2>Ministry Partner</h2>
             <p>Register or sign in to stay connected and receive ministry updates and announcements.</p>
             <div className="auth-type-buttons">
