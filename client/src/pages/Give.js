@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PageHero from '../components/PageHero';
 import API from '../utils/api';
 import './Give.css';
-
 const Give = () => {
   const [data, setData] = useState(null);
   useEffect(() => { API.get('/pages/give').then(r => setData(r.data)).catch(() => {}); }, []);
   const c = data?.content || {};
-  const supports = c.supports || ['Child care programs', 'Community outreach', 'Building projects', 'Food distribution', 'Christmas missions'];
-  const methods = c.methods || ['Bank Transfer', 'UPI', 'Online Donations'];
-
+  const supports = c.supports || ['Community outreach', 'Food distribution', 'Christmas missions'];
+  const methods = c.methods || ['UPI'];
   return (
     <div className="give-page">
       <PageHero
@@ -40,7 +38,6 @@ const Give = () => {
               <h3>Donation Methods</h3>
               {methods.map((m, i) => (
                 <div className="method-card" key={i}>
-                  <div className="method-icon">{['🏦','📱','💻'][i]}</div>
                   <div>
                     <h4>{m}</h4>
                     <p>Contact us for {m.toLowerCase()} details</p>
@@ -53,8 +50,8 @@ const Give = () => {
                 </div>
               )}
               <div className="give-contact-note">
-                <p>📧 For donation queries: <strong>info@ten9ministries.in</strong></p>
-                <p>📱 <strong>+91 00000 00000</strong></p>
+                <p>For donation queries: <strong>ten9india@gmail.com</strong></p>
+                <p><strong>+91 93929 29509</strong></p>
               </div>
             </div>
           </div>
@@ -63,5 +60,4 @@ const Give = () => {
     </div>
   );
 };
-
 export default Give;
