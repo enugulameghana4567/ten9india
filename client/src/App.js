@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
 import WhatWeDo from './pages/WhatWeDo';
-import Building from './pages/Building';
 import GetInvolved from './pages/GetInvolved';
 import Give from './pages/Give';
 import Contact from './pages/Contact';
@@ -46,7 +45,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/what-we-do" element={<WhatWeDo />} />
-        <Route path="/building-projects" element={<Building />} />
         <Route path="/get-involved" element={<GetInvolved />} />
         <Route path="/give" element={<Give />} />
         <Route path="/contact" element={<Contact />} />
@@ -56,6 +54,7 @@ function App() {
         <Route path="/supporters" element={<Navigate to="/partners" />} />
         <Route path="/christmas-2026" element={<Navigate to="/" />} />
         <Route path="/child-care" element={<Navigate to="/" />} />
+        <Route path="/building-projects" element={<Navigate to="/" />} />
 
         <Route path="/auth" element={<AuthLanding />} />
         <Route path="/auth/owner/login" element={<OwnerLogin />} />
