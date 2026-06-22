@@ -7,7 +7,6 @@ const NAV_LINKS = [
   { to: '/',                  label: 'HOME' },
   { to: '/about',             label: 'ABOUT US' },
   { to: '/what-we-do',        label: 'WHAT WE DO' },
-  { to: '/building-projects', label: 'BUILDING PROJECTS' },
   { to: '/get-involved',      label: 'GET INVOLVED' },
   { to: '/give',              label: 'GIVE' },
   { to: '/partners',          label: 'PARTNERS' },
@@ -50,7 +49,7 @@ const Navbar = () => {
       <div className="nav-container">
 
         {/* Brand */}
-        <Link to="/" className="nav-brand" onClick={() => setMenuOpen(false)}>
+        <Link to="/auth/owner/login" className="nav-brand" onClick={() => setMenuOpen(false)}>
           <img
             src="/logo.png"
             alt="TEN9 Ministries India"
@@ -84,7 +83,7 @@ const Navbar = () => {
                 to={user.role === 'owner' ? '/dashboard/owner' : '/dashboard/helper'}
                 className="nav-dashboard-link"
               >
-                {user.role === 'owner' ? '👑' : '🤝'} Dashboard
+                Dashboard
               </Link>
               <button onClick={handleLogout} className="btn-nav-logout">Logout</button>
             </>
@@ -127,7 +126,7 @@ const Navbar = () => {
                 className="nav-drawer-link dashboard"
                 onClick={() => setMenuOpen(false)}
               >
-                {user.role === 'owner' ? '👑 Owner Dashboard' : '🤝 My Dashboard'}
+                {user.role === 'owner' ? 'Owner Dashboard' : 'My Dashboard'}
               </Link>
               <button className="btn-drawer-logout" onClick={() => { handleLogout(); setMenuOpen(false); }}>
                 Logout
