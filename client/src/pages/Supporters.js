@@ -7,22 +7,25 @@ const Partners = () => {
   const [supporters, setSupporters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [brokenIds, setBrokenIds] = useState({});
+  const [pageData, setPageData] = useState(null);
 
   useEffect(() => {
     API.get('/public/supporters')
       .then(r => { setSupporters(r.data); setLoading(false); })
       .catch(() => setLoading(false));
+    API.get('/pages/partners').then(r => setPageData(r.data)).catch(() => {});
   }, []);
 
   const markBroken = (id) => setBrokenIds(prev => ({ ...prev, [id]: true }));
 
   const visibleSupporters = supporters.filter(s => s.image && !brokenIds[s._id]);
+  const customBlocks = (pageData?.content?.customBlocks || []).filter(Boolean);
 
   return (
     <div className="supporters-page">
       <PageHero
-        title="Our Partners"
-        subtitle="People who stand with TEN9 Ministries India through prayer, service, and generosity"
+        title={pageData?.title || "Our Partners"}
+        subtitle={pageData?.subtitle || "People who stand with TEN9 Ministries India through prayer, service, and generosity"}
         image="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1600&q=80"
         badge="PARTNERS"
       />
@@ -57,6 +60,14 @@ const Partners = () => {
                     <span className="supporter-badge">Partner</span>
                   </div>
                 </div>
+              ))}
+            </div>
+          )}
+
+          {customBlocks.length > 0 && (
+            <div style={{ marginTop: '40px', marginBottom: '40px' }}>
+              {customBlocks.map((block, i) => (
+                <p key={i} style={{ marginBottom: '16px' }}>{block}</p>
               ))}
             </div>
           )}
