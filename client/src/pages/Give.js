@@ -35,6 +35,13 @@ const Give = () => {
                 ))}
               </div>
               {c.message && <div className="give-quote">"{c.message}"</div>}
+              {(c.customBlocks || []).filter(Boolean).length > 0 && (
+                <div style={{ marginTop: '24px' }}>
+                  {c.customBlocks.filter(Boolean).map((block, i) => (
+                    <p key={i} style={{ marginBottom: '16px' }}>{block}</p>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="give-methods">
               <h3>Donation Methods</h3>
