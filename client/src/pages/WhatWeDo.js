@@ -5,12 +5,12 @@ import './WhatWeDo.css';
 const WhatWeDo = () => {
   const [data, setData] = useState(null);
   useEffect(() => { API.get('/pages/whatwedo').then(r => setData(r.data)).catch(() => {}); }, []);
-  const services = data?.content?.services || [
+  const services = (data?.content?.services || [
     { name: 'Gospel Outreach', description: 'Sharing the Word of God through evangelism, prayer meetings, worship gatherings, and mission programs.' },
     { name: 'Community Support', description: 'Helping families and communities through food distribution, education support, and emergency assistance.' },
     { name: 'Prayer & Worship', description: 'Conducting worship events, spiritual counseling, and prayer support for individuals and families.' },
     { name: 'Youth Ministry', description: 'Encouraging young people to grow spiritually and become future leaders rooted in faith.' }
-  ];
+  ]).filter(s => s.name !== 'Child Care Mission');
   return (
     <div className="whatwedo-page">
       <PageHero
