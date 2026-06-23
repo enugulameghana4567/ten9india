@@ -95,6 +95,17 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Additional Content Blocks (added by Owner) */}
+      {(data?.content?.customBlocks || []).filter(Boolean).length > 0 && (
+        <section className="welcome-section">
+          <div className="container">
+            {data.content.customBlocks.filter(Boolean).map((block, i) => (
+              <p key={i} style={{ marginBottom: '16px' }}>{block}</p>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* CTA */}
       <section className="cta-section">
         <div className="container">
