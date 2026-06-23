@@ -10,6 +10,7 @@ const PAGES = [
   { key: 'whatwedo', label: 'What We Do' },
   { key: 'getinvolved', label: 'Get Involved' },
   { key: 'give', label: 'Your Give' },
+  { key: 'partners', label: 'Partners' },
   { key: 'contact', label: 'Contact Us' },
 ];
 
@@ -18,6 +19,7 @@ const OwnerDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [activePage, setActivePage] = useState('home');
   const [pageData, setPageData] = useState({ title: '', subtitle: '', content: {} });
+  const [activeBlockIndex, setActiveBlockIndex] = useState(null);
   const [helpers, setHelpers] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
@@ -86,6 +88,25 @@ const OwnerDashboard = () => {
   };
 
   const updateContent = (key, value) => setPageData(prev => ({ ...prev, content: { ...prev.content, [key]: value } }));
+
+  const addCustomBlock = () => {
+    const blocks = [...(pageData.content.customBlocks || []), ''];
+    updateContent('customBlocks', blocks);
+    setActiveBlockIndex(blocks.length - 1);
+  };
+
+  const updateCustomBlock = (index, value) => {
+    const blocks = [...(pageData.content.customBlocks || [])];
+    blocks[index] = value;
+    updateContent('customBlocks', blocks);
+  };
+
+  const deleteCustomBlock = (index) => {
+    const blocks = [...(pageData.content.customBlocks || [])];
+    blocks.splice(index, 1);
+    updateContent('customBlocks', blocks);
+    setActiveBlockIndex(null);
+  };
 
   // Announcement image picker
   const handleAnnImages = (e) => {
@@ -164,12 +185,43 @@ const OwnerDashboard = () => {
       <div className="page-editor">
         <div className="editor-header">
           <h3>{PAGES.find(p => p.key === activePage)?.label} — Page Editor</h3>
-          <button className="btn-save" onClick={savePage} disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</button>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button className="btn-save" onClick={addCustomBlock} style={{ background: 'transparent', border: '2px solid var(--crimson, #8B1A1A)', color: 'var(--crimson, #8B1A1A)' }}>+ Add Content</button>
+            <button className="btn-save" onClick={savePage} disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</button>
+          </div>
         </div>
         <div className="editor-section">
           <h4>Page Header</h4>
           <div className="form-group"><label>Page Title</label><input value={pageData.title} onChange={e => setPageData({ ...pageData, title: e.target.value })} /></div>
           <div className="form-group"><label>Page Subtitle</label><input value={pageData.subtitle} onChange={e => setPageData({ ...pageData, subtitle: e.target.value })} /></div>
+        </div>
+        <div className="editor-section">
+          <h4>Additional Content Blocks</h4>
+          {(c.customBlocks || []).map((block, i) => (
+            <div key={i} className="form-group" style={{ position: 'relative' }}>
+              <label>Content Block {i + 1}</label>
+              <textarea
+                rows="3"
+                value={block}
+                onFocus={() => setActiveBlockIndex(i)}
+                onChange={e => updateCustomBlock(i, e.target.value)}
+                placeholder="Write additional content for this page..."
+              />
+              {activeBlockIndex === i && (
+                <button
+                  type="button"
+                  className="btn-delete-sm"
+                  onMouseDown={() => deleteCustomBlock(i)}
+                  style={{ position: 'absolute', top: '0', right: '0' }}
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          ))}
+          {(!c.customBlocks || c.customBlocks.length === 0) && (
+            <p style={{ opacity: 0.6, fontSize: '14px' }}>No additional content blocks yet. Click "+ Add Content" above to add one.</p>
+          )}
         </div>
         {activePage === 'home' && <div className="editor-section"><h4>Home Content</h4>
           <div className="form-group"><label>Welcome Text</label><textarea rows="3" value={c.welcomeText||''} onChange={e => updateContent('welcomeText', e.target.value)} /></div>
