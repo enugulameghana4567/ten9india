@@ -6,8 +6,10 @@ const Give = () => {
   const [data, setData] = useState(null);
   useEffect(() => { API.get('/pages/give').then(r => setData(r.data)).catch(() => {}); }, []);
   const c = data?.content || {};
-  const supports = c.supports || ['Community outreach', 'Food distribution', 'Christmas missions'];
-  const methods = c.methods || ['UPI'];
+  const supports = (c.supports || ['Community outreach', 'Food distribution', 'Christmas missions'])
+    .filter(s => s.toLowerCase() !== 'child care programs' && s.toLowerCase() !== 'building projects');
+  const methods = (c.methods || ['UPI'])
+    .filter(m => m.toLowerCase() !== 'bank transfer' && m.toLowerCase() !== 'online donations');
   return (
     <div className="give-page">
       <PageHero
