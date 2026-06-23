@@ -33,6 +33,15 @@ const WhatWeDo = () => {
           </div>
         </div>
       </section>
+      {(data?.content?.customBlocks || []).filter(Boolean).length > 0 && (
+        <section className="services-section">
+          <div className="container">
+            {data.content.customBlocks.filter(Boolean).map((block, i) => (
+              <p key={i} style={{ marginBottom: '16px' }}>{block}</p>
+            ))}
+          </div>
+        </section>
+      )}
       <section className="impact-banner">
         <div className="container">
           <div className="impact-content">
