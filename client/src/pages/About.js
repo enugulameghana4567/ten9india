@@ -56,6 +56,13 @@ const About = () => {
               </div>
             </div>
           </div>
+          {(c.customBlocks || []).filter(Boolean).length > 0 && (
+            <div style={{ marginTop: '40px' }}>
+              {c.customBlocks.filter(Boolean).map((block, i) => (
+                <p key={i} style={{ marginBottom: '16px' }}>{block}</p>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>
